@@ -1,9 +1,3 @@
-// export interface DefaultResponse<T> {
-//   success: boolean;
-//   data?: T;
-//   message?: string;
-// }
-
 export type SuccessResponse<T> = {
   success: true;
   data: T; // required when success

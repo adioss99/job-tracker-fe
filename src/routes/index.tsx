@@ -14,7 +14,9 @@ const HomePage = lazy(() => import("@/pages/home"));
 const LoginPage = lazy(() => import("@/pages/login"));
 const RegisterPage = lazy(() => import("@/pages/register"));
 const DashboardPage = lazy(() => import("@/pages/dashboard"));
-const ProfilePage = lazy(() => import("@/pages/profile-page"));
+const ProfilePage = lazy(() => import("@/pages/profile"));
+const JobList = lazy(() => import("@/pages/job-list"));
+const JobAdd = lazy(() => import("@/pages/job-add"));
 
 export const appRouter = createBrowserRouter([
   {
@@ -53,6 +55,18 @@ export const appRouter = createBrowserRouter([
           {
             Component: DashboardLayout,
             children: [
+              {
+                path: "/dashboard",
+                Component: DashboardPage,
+              },
+              {
+                path: "/list-job",
+                Component: JobList,
+              },
+              {
+                path: "/add-job",
+                Component: JobAdd,
+              },
               {
                 path: "/dashboard",
                 Component: DashboardPage,

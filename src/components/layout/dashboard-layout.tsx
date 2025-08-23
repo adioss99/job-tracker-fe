@@ -18,8 +18,8 @@ export const MobileToggleButton = () => {
 
 const menuItems = [
   { title: "Dashboard", url: "/dashboard" },
-  { title: "Job List", url: "#" },
-  { title: "Add Job", url: "#" },
+  { title: "Job List", url: "/list-job" },
+  { title: "Add Job", url: "/add-job" },
 ];
 export const DashboardLayout: React.FC = () => {
   return (
