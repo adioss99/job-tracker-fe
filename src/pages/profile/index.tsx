@@ -8,3 +8,5 @@ export const ProfilePage: React.FC = () => {
   if (error) return <p>Something went wrong</p>;
   return <div>Hi, {res?.data?.name}</div>;
 };
+
+export default ProfilePage;
