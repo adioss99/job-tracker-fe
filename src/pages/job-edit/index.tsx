@@ -4,19 +4,16 @@ import { JobForm } from "@/components/job-form";
 
 import { useJobForm } from "@/stores/use-job-form";
 
-const JobAddPage: React.FC = () => {
+const JobEditPage = () => {
   const payload = useJobForm((state) => state.payload);
   const isSubmitted = useJobForm((state) => state.isSubmitted);
+  console.log(" isSubmitted", isSubmitted);
+
   useEffect(() => {
-    if (isSubmitted) {
-      const submit = async () => {
-        console.log("payload", payload);
-      };
-      submit();
-    }
+    if (isSubmitted) return console.log("payload", payload);
   }, [payload, isSubmitted]);
 
-  return <JobForm pageTitle="Add New Job" />;
+  return <JobForm pageTitle="Edit Job Existed" />;
 };
 
-export default JobAddPage;
+export default JobEditPage;

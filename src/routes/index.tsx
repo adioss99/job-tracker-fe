@@ -15,8 +15,8 @@ const LoginPage = lazy(() => import("@/pages/login"));
 const RegisterPage = lazy(() => import("@/pages/register"));
 const DashboardPage = lazy(() => import("@/pages/dashboard"));
 const ProfilePage = lazy(() => import("@/pages/profile"));
-const JobList = lazy(() => import("@/pages/job-list"));
-const JobAdd = lazy(() => import("@/pages/job-add"));
+const JobListPage = lazy(() => import("@/pages/job-list"));
+const JobAddPage = lazy(() => import("@/pages/job-add"));
 
 export const appRouter = createBrowserRouter([
   {
@@ -61,11 +61,11 @@ export const appRouter = createBrowserRouter([
               },
               {
                 path: "/list-job",
-                Component: JobList,
+                Component: JobListPage,
               },
               {
                 path: "/add-job",
-                Component: JobAdd,
+                Component: JobAddPage,
               },
               {
                 path: "/dashboard",
