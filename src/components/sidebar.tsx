@@ -75,11 +75,7 @@ export const SidebarComponent: React.FC<SidebarComponentProps> = ({
   const location = useLocation();
   return (
     <>
-      <Sidebar
-        className="bg-[#eff3fa]"
-        collapsible="offcanvas"
-        side="left"
-        variant="sidebar">
+      <Sidebar collapsible="offcanvas" variant="inset">
         <SidebarHeader>
           <Link
             className="flex flex-row justify-center w-full mb-2 mt-4"
@@ -102,8 +98,8 @@ export const SidebarComponent: React.FC<SidebarComponentProps> = ({
                       className={
                         " font-medium " +
                         (location.pathname === item.url
-                          ? "bg-gray-200 text-gray-700 hover:bg-gray-200 hover:text-gray-700"
-                          : "hover:bg-white ")
+                          ? "bg-black text-white hover:bg-black hover:text-white"
+                          : "hover:bg-gray-200")
                       }
                       variant="default"
                       asChild>

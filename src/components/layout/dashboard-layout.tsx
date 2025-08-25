@@ -17,12 +17,14 @@ export const DashboardLayout: React.FC = () => {
     <Suspense fallback={<Loading />}>
       <SidebarProvider>
         <SidebarComponent menuItems={menuItems} />
-        <div className="w-full">
-          <SidebarInset className="sticky top-0 z-10 ">
+        <SidebarInset className="flex flex-col h-screen ">
+          <div className="sticky top-0 z-10 bg-white  border-b">
             <DashboardHeader />
-          </SidebarInset>
-          <div className="relative p-4 ">{<Outlet />}</div>
-        </div>
+          </div>
+          <div className="flex-1 overflow-y-auto p-4">
+            <Outlet />
+          </div>
+        </SidebarInset>
       </SidebarProvider>
     </Suspense>
   );
