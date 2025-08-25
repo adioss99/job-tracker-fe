@@ -1,7 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
-import { PanelLeftIcon } from "lucide-react";
+import { PanelsTopLeft } from "lucide-react";
 import * as React from "react";
 
 import { Button } from "@/components/ui/button";
@@ -266,7 +266,7 @@ function SidebarTrigger({
         toggleSidebar();
       }}
       {...props}>
-      <PanelLeftIcon />
+      <PanelsTopLeft className="opacity-90" />
       <span className="sr-only">Toggle Sidebar</span>
     </Button>
   );

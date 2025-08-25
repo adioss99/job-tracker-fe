@@ -1,5 +1,5 @@
-import { LogOut, Settings, UserRound } from "lucide-react";
-import { Link, useNavigate } from "react-router";
+import { LogOut, Settings, UserRound, type LucideIcon } from "lucide-react";
+import { Link, useLocation, useNavigate } from "react-router";
 import { toast } from "react-toastify";
 
 import { Button } from "@/components/ui/button";
@@ -26,6 +26,7 @@ import { useLogout } from "@/hooks/use-auth";
 type MenuItem = {
   title: string;
   url: string;
+  icon?: LucideIcon;
 };
 type SidebarComponentProps = {
   menuItems: MenuItem[];
@@ -69,12 +70,13 @@ const DropDownMenuItem = () => {
   );
 };
 export const SidebarComponent: React.FC<SidebarComponentProps> = ({
-  menuItems,
+  menuItems: items,
 }) => {
+  const location = useLocation();
   return (
     <>
       <Sidebar
-        className="bg-amber-500"
+        className="bg-[#eff3fa]"
         collapsible="offcanvas"
         side="left"
         variant="sidebar">
@@ -94,13 +96,20 @@ export const SidebarComponent: React.FC<SidebarComponentProps> = ({
           <SidebarGroup>
             <SidebarGroupContent>
               <SidebarMenu>
-                {menuItems.map((item) => (
+                {items.map((item) => (
                   <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild>
-                      <Link
-                        className="w-full text-gray-800 font-medium"
-                        to={item.url}>
-                        {item.title}
+                    <SidebarMenuButton
+                      className={
+                        " font-medium " +
+                        (location.pathname === item.url
+                          ? "bg-gray-200 text-gray-700 hover:bg-gray-200 hover:text-gray-700"
+                          : "hover:bg-white ")
+                      }
+                      variant="default"
+                      asChild>
+                      <Link className="flex items-center gap-2" to={item.url}>
+                        {item.icon && <item.icon />}
+                        <span>{item.title}</span>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
