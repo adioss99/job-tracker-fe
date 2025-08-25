@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
-import { CalendarIcon, Link } from "lucide-react";
+import { CalendarIcon, Link, Loader2Icon } from "lucide-react";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -35,9 +35,29 @@ import { type AddJobFormData, addJobSchema } from "@/validation/job-validation";
 
 interface JobFormProps {
   pageTitle: string;
+  isLoading: boolean;
 }
 
-export const JobForm: React.FC<JobFormProps> = ({ pageTitle }) => {
+const roles = ["Full Time", "Part Time", "Internship", "Contract", "Freelance"];
+const types = ["Onsite", "Remote", "Hybrid"];
+const sources = [
+  "LinkedIn",
+  "Indeed",
+  "Socmed",
+  "Glints",
+  "Jobstreet",
+  "Other",
+];
+const applyOns = [
+  "InApp",
+  "Email",
+  "Company Web",
+  "Whatsapp",
+  "GoogleForm",
+  "Other",
+];
+
+export const JobForm: React.FC<JobFormProps> = ({ pageTitle, isLoading }) => {
   const [open, setOpen] = useState(false);
   const setFormData = useJobForm((state) => state.setFormData);
 
@@ -46,13 +66,13 @@ export const JobForm: React.FC<JobFormProps> = ({ pageTitle }) => {
     defaultValues: {
       title: "",
       company: "",
-      role: "",
-      type: "",
-      source: "",
+      role: "Full Time",
+      type: "Onsite",
+      source: "Other",
       sourceLink: "",
       location: "",
       applyDate: new Date(),
-      applyOn: "",
+      applyOn: "InApp",
     },
   });
 
@@ -64,6 +84,7 @@ export const JobForm: React.FC<JobFormProps> = ({ pageTitle }) => {
     <>
       <Form {...form}>
         <form
+          autoComplete="off"
           className="w-full bg-white sm:p-5 md:p-2 rounded-xl"
           onSubmit={form.handleSubmit(onSubmit)}>
           <div className="grid grid-cols-12 gap-3">
@@ -104,7 +125,7 @@ export const JobForm: React.FC<JobFormProps> = ({ pageTitle }) => {
               control={form.control}
               name="company"
               render={({ field }) => (
-                <FormItem className="col-span-12 col-start-auto flex self-end flex-col gap-2 space-y-0 items-start">
+                <FormItem className="col-span-12 sm:col-span-6 col-start-auto flex self-end flex-col gap-2 space-y-0 items-start">
                   <FormLabel>
                     Company Name
                     {form.formState.errors.company && (
@@ -130,7 +151,7 @@ export const JobForm: React.FC<JobFormProps> = ({ pageTitle }) => {
               control={form.control}
               name="location"
               render={({ field }) => (
-                <FormItem className="col-span-12 col-start-auto flex self-end flex-col gap-2 space-y-0 items-start">
+                <FormItem className="col-span-12 sm:col-span-6 col-start-auto flex self-end flex-col gap-2 space-y-0 items-start">
                   <FormLabel>
                     Company Location
                     {form.formState.errors.location && (
@@ -157,8 +178,8 @@ export const JobForm: React.FC<JobFormProps> = ({ pageTitle }) => {
               name="type"
               render={({ field }) => (
                 <FormItem className="col-span-12 col-start-auto flex self-end flex-col gap-2 space-y-0 items-start">
-                  <FormLabel className="flex shrink-0">
-                    Working Type
+                  <FormLabel htmlFor="type">
+                    Type
                     {form.formState.errors.type && (
                       <Separator
                         className="data-[orientation=vertical]:h-4"
@@ -172,49 +193,28 @@ export const JobForm: React.FC<JobFormProps> = ({ pageTitle }) => {
                     <FormControl>
                       <RadioGroup
                         className="w-full "
-                        id="radio-0"
-                        key="radio-0"
+                        id="type"
+                        key="type"
                         {...field}
                         onValueChange={field.onChange}>
-                        <FormLabel
-                          className="border-0 p-0 flex items-center has-[[data-state=checked]]:border-primary"
-                          htmlFor="radio-0-remote"
-                          key="remote">
-                          <RadioGroupItem id="radio-0-remote" value="remote" />
-                          <div className="grid gap-2 leading-none">
-                            <FormLabel
-                              className="font-medium"
-                              htmlFor="radio-0-remote">
-                              Remote
-                            </FormLabel>
-                          </div>
-                        </FormLabel>
-                        <FormLabel
-                          className="border-0 p-0 flex items-center has-[[data-state=checked]]:border-primary"
-                          htmlFor="radio-0-onsite"
-                          key="onsite">
-                          <RadioGroupItem id="radio-0-onsite" value="onsite" />
-                          <div className="grid gap-2 leading-none">
-                            <FormLabel
-                              className="font-medium"
-                              htmlFor="radio-0-onsite">
-                              Onsite
-                            </FormLabel>
-                          </div>
-                        </FormLabel>
-                        <FormLabel
-                          className="border-0 p-0 flex items-center has-[[data-state=checked]]:border-primary"
-                          htmlFor="radio-0-hybrid"
-                          key="hybrid">
-                          <RadioGroupItem id="radio-0-hybrid" value="hybrid" />
-                          <div className="grid gap-2 leading-none">
-                            <FormLabel
-                              className="font-medium"
-                              htmlFor="radio-0-hybrid">
-                              Hybrid
-                            </FormLabel>
-                          </div>
-                        </FormLabel>
+                        {types.map((type) => (
+                          <FormLabel
+                            className="border-0 p-0 flex items-center has-[[data-state=checked]]:border-primary"
+                            htmlFor={`type-${type}`}
+                            key={`${type}`}>
+                            <RadioGroupItem
+                              id={`type-${type}`}
+                              value={`${type}`}
+                            />
+                            <div className="grid gap-2 leading-none">
+                              <FormLabel
+                                className="font-medium"
+                                htmlFor={`type-${type}`}>
+                                {type}
+                              </FormLabel>
+                            </div>
+                          </FormLabel>
+                        ))}
                       </RadioGroup>
                     </FormControl>
                   </div>
@@ -226,7 +226,7 @@ export const JobForm: React.FC<JobFormProps> = ({ pageTitle }) => {
               name="role"
               render={({ field }) => (
                 <FormItem className="col-span-6 col-start-auto flex self-end flex-col gap-2 space-y-0 items-start">
-                  <FormLabel className="flex shrink-0">
+                  <FormLabel htmlFor="role">
                     Role
                     {form.formState.errors.role && (
                       <Separator
@@ -243,25 +243,15 @@ export const JobForm: React.FC<JobFormProps> = ({ pageTitle }) => {
                         key="role"
                         {...field}
                         onValueChange={field.onChange}>
-                        <SelectTrigger className="w-full rounded-xl ">
+                        <SelectTrigger className="w-full rounded-xl" id="role">
                           <SelectValue placeholder="" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem key="fulltime" value="Fulltime">
-                            Fulltime
-                          </SelectItem>
-
-                          <SelectItem key="contract" value="Contract">
-                            Contract
-                          </SelectItem>
-
-                          <SelectItem key="intern" value="Intern">
-                            Intern
-                          </SelectItem>
-
-                          <SelectItem key="Freelance" value="Freelance">
-                            Freelance
-                          </SelectItem>
+                          {roles.map((role) => (
+                            <SelectItem key={role} value={role}>
+                              {role}
+                            </SelectItem>
+                          ))}
                         </SelectContent>
                       </Select>
                     </FormControl>
@@ -274,7 +264,7 @@ export const JobForm: React.FC<JobFormProps> = ({ pageTitle }) => {
               name="source"
               render={({ field }) => (
                 <FormItem className="col-span-6 col-start-auto flex self-end flex-col gap-2 space-y-0 items-start">
-                  <FormLabel className="flex shrink-0">
+                  <FormLabel htmlFor="source">
                     Source
                     {form.formState.errors.source && (
                       <Separator
@@ -288,35 +278,20 @@ export const JobForm: React.FC<JobFormProps> = ({ pageTitle }) => {
                   <div className="w-full">
                     <FormControl>
                       <Select
-                        // id="source"
                         key="source-jkl"
                         {...field}
                         onValueChange={field.onChange}>
-                        <SelectTrigger className="w-full rounded-xl ">
+                        <SelectTrigger
+                          className="w-full rounded-xl "
+                          id="source">
                           <SelectValue placeholder="" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem key="instagram" value="Instagram">
-                            Instagram
-                          </SelectItem>
-
-                          <SelectItem key="linkedin" value="LinkedIn">
-                            LinkedIn
-                          </SelectItem>
-
-                          <SelectItem key="JobStreet" value="JobStreet">
-                            JobStreet
-                          </SelectItem>
-
-                          <SelectItem key="Glints" value="Glints">
-                            Glints
-                          </SelectItem>
-                          <SelectItem key="Twitter" value="Twitter">
-                            Twitter
-                          </SelectItem>
-                          <SelectItem key="others" value="others">
-                            others
-                          </SelectItem>
+                          {sources.map((role) => (
+                            <SelectItem key={role} value={role}>
+                              {role}
+                            </SelectItem>
+                          ))}
                         </SelectContent>
                       </Select>
                     </FormControl>
@@ -329,7 +304,7 @@ export const JobForm: React.FC<JobFormProps> = ({ pageTitle }) => {
               name="sourceLink"
               render={({ field }) => (
                 <FormItem className="col-span-12 col-start-auto flex self-end flex-col gap-2 space-y-0 items-start">
-                  <FormLabel className="flex shrink-0">
+                  <FormLabel htmlFor="sourceLink">
                     URL
                     {form.formState.errors.sourceLink && (
                       <Separator
@@ -339,26 +314,24 @@ export const JobForm: React.FC<JobFormProps> = ({ pageTitle }) => {
                     )}
                     <FormMessage />
                   </FormLabel>
-                  <div className="w-full">
-                    <FormControl>
-                      <div className="relative w-full">
-                        <Input
-                          className="w-full rounded-xl"
-                          id="sourceLink"
-                          key="sourceLink"
-                          placeholder=""
-                          type="url"
-                          {...field}
-                        />
-                        <div
-                          className={
-                            "text-muted-foreground pointer-events-none absolute inset-y-0 flex items-center justify-center  peer-disabled:opacity-50 start-0 ps-3"
-                          }>
-                          <Link className="size-4" strokeWidth={1.5} />
-                        </div>
+                  <FormControl>
+                    <div className="relative w-full">
+                      <Input
+                        className="ps-8 rounded-xl"
+                        id="sourceLink"
+                        key="sourceLink"
+                        placeholder=""
+                        type="url"
+                        {...field}
+                      />
+                      <div
+                        className={
+                          "text-muted-foreground pointer-events-none absolute inset-y-0 flex items-center justify-center  peer-disabled:opacity-50 start-0 ps-3"
+                        }>
+                        <Link className="size-4" strokeWidth={1.5} />
                       </div>
-                    </FormControl>
-                  </div>
+                    </div>
+                  </FormControl>
                 </FormItem>
               )}
             />
@@ -367,7 +340,7 @@ export const JobForm: React.FC<JobFormProps> = ({ pageTitle }) => {
               name="applyDate"
               render={({ field }) => (
                 <FormItem className="col-span-12 sm:col-span-6 col-start-auto flex self-end flex-col gap-2 space-y-0 items-start">
-                  <FormLabel className="flex shrink-0">
+                  <FormLabel htmlFor="applyDate">
                     Apply Date
                     {form.formState.errors.applyDate && (
                       <Separator
@@ -421,7 +394,7 @@ export const JobForm: React.FC<JobFormProps> = ({ pageTitle }) => {
               name="applyOn"
               render={({ field }) => (
                 <FormItem className="col-span-12 sm:col-span-6 col-start-auto flex self-end flex-col gap-2 space-y-0 items-start">
-                  <FormLabel className="flex shrink-0">
+                  <FormLabel htmlFor="applyOn">
                     Apply On
                     {form.formState.errors.applyOn && (
                       <Separator
@@ -438,28 +411,17 @@ export const JobForm: React.FC<JobFormProps> = ({ pageTitle }) => {
                         key="source"
                         {...field}
                         onValueChange={field.onChange}>
-                        <SelectTrigger className="w-full rounded-xl ">
+                        <SelectTrigger
+                          className="w-full rounded-xl "
+                          id="applyOn">
                           <SelectValue placeholder="" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem key="InApp" value="InApp">
-                            InApp
-                          </SelectItem>
-
-                          <SelectItem key="Email" value="Email">
-                            Email
-                          </SelectItem>
-
-                          <SelectItem key="Company Web" value="Company Web">
-                            Company Web
-                          </SelectItem>
-
-                          <SelectItem key="GoogleForm" value="GoogleForm">
-                            GoogleForm
-                          </SelectItem>
-                          <SelectItem key="others" value="others">
-                            others
-                          </SelectItem>
+                          {applyOns.map((val) => (
+                            <SelectItem key={val} value={val}>
+                              {val}
+                            </SelectItem>
+                          ))}
                         </SelectContent>
                       </Select>
                     </FormControl>
@@ -468,18 +430,24 @@ export const JobForm: React.FC<JobFormProps> = ({ pageTitle }) => {
               )}
             />
             <FormItem className="col-span-12 col-end-auto flex self-end flex-col gap-2 space-y-0 items-end mt-5">
-              <FormLabel className="hidden shrink-0">Submit</FormLabel>
-
               <div className="w-full flex justify-end">
                 <FormControl>
                   <Button
-                    className="rounded-xl w-32"
+                    className="rounded-xl w-full sm:w-32"
+                    disabled={isLoading}
                     id="submit-button-0"
                     key="submit-button-0"
                     name=""
                     type="submit"
                     variant="default">
-                    Submit
+                    {isLoading ? (
+                      <>
+                        <Loader2Icon className="animate-spin" />
+                        Loading...
+                      </>
+                    ) : (
+                      "Submit"
+                    )}
                   </Button>
                 </FormControl>
               </div>

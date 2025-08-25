@@ -21,9 +21,7 @@ export const DashboardLayout: React.FC = () => {
           <div className="sticky top-0 z-10 bg-white  border-b">
             <DashboardHeader />
           </div>
-          <div className="flex-1 overflow-y-auto p-4">
-            <Outlet />
-          </div>
+          <div className="flex-1 overflow-y-auto p-4">{<Outlet />}</div>
         </SidebarInset>
       </SidebarProvider>
     </Suspense>

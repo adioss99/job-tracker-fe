@@ -1,13 +1,13 @@
 import { useMutation } from "@tanstack/react-query";
 
 import { apiFetch } from "@/api/api";
-import type { AddJobFormData } from "@/validation/job-validation";
+import type { JobRequest, JobResponse } from "@/ts/interface/job-interfaces";
 
-export const useAddTrackJob = () => {
+export const useAddJob = () => {
   return useMutation({
-    mutationKey: ["addTrackJob"],
-    mutationFn: (payload: AddJobFormData) =>
-      apiFetch<AddJobFormData>("/api/job", {
+    mutationKey: ["addJob"],
+    mutationFn: (payload: JobRequest) =>
+      apiFetch<JobResponse>("/api/job", {
         method: "POST",
         body: JSON.stringify(payload),
       }),
@@ -15,10 +15,10 @@ export const useAddTrackJob = () => {
   });
 };
 
-export const useRemoveTrackJob = () => {};
+export const useRemoveJob = () => {};
 
-export const useUpdateTrackJob = () => {};
+export const useUpdateJob = () => {};
 
-export const useGetTrackJobList = () => {};
+export const useGetJobList = () => {};
 
-export const useGetTrackJobDetails = () => {};
+export const useGetJobDetails = () => {};
