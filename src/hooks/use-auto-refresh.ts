@@ -1,26 +1,36 @@
-// use-auto-refresh.tsx
-"use client";
-
 import { useEffect } from "react";
 
 import { useGetRefreshToken } from "@/hooks/use-auth";
+import { getRemainingTime } from "@/lib/jwt";
+import { usePersistStore } from "@/stores/use-persist";
 
 export function useAutoRefresh() {
   const { mutateAsync: getRefreshToken } = useGetRefreshToken();
+  const token = usePersistStore((state) => state.auth.token);
+
   useEffect(() => {
-    const interval = setInterval(
-      async () => {
-        try {
-          await getRefreshToken();
-          console.log("token refreshed");
-        } catch (err) {
-          throw new Error("❌ refresh error" + err);
-        }
-      },
-      (14 * 60 + 45) * 1000
-    );
+    if (!token) return;
+    const remaining = getRemainingTime(token);
+    async function refreshFn() {
+      return await getRefreshToken();
+    }
+
+    if (remaining <= 0) {
+      // token already expired -> refresh immediately
+      refreshFn();
+      return;
+    }
+    const refreshIn = (remaining - 30) * 1000;
+
+    const interval = setInterval(() => {
+      try {
+        refreshFn();
+      } catch (err) {
+        throw new Error("Refresh error" + err);
+      }
+    }, refreshIn);
     return () => {
       clearInterval(interval);
     };
-  }, [getRefreshToken]);
+  }, [token, getRefreshToken]);
 }
