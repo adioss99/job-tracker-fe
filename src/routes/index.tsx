@@ -65,7 +65,7 @@ export const appRouter = createBrowserRouter([
                 Component: JobListPage,
               },
               {
-                path: "/job/add",
+                path: "/job-add",
                 Component: JobAddPage,
               },
               {

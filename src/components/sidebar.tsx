@@ -74,10 +74,7 @@ export const SidebarComponent: React.FC<SidebarComponentProps> = ({
 }) => {
   const { pathname } = useLocation();
   const isActive = (url: string) => {
-    return (
-      pathname === url ||
-      (pathname.startsWith(url) && !pathname.startsWith("/job/add"))
-    );
+    return pathname === url || pathname.startsWith(url + "/");
   };
   return (
     <>

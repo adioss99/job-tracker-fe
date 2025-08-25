@@ -14,19 +14,19 @@ const menuItems = [
     icon: CircleGauge,
   },
   { title: "Job List", url: "/job", icon: List },
-  { title: "Add New Job", url: "/job/add", icon: CirclePlus },
+  { title: "Add New Job", url: "/job-add", icon: CirclePlus },
 ];
 export const DashboardLayout: React.FC = () => {
   return (
     <Suspense fallback={<Loading />}>
       <SidebarProvider>
         <SidebarComponent menuItems={menuItems} />
-        <SidebarInset className="flex flex-col h-screen ">
-          <div className="sticky top-0 z-10 bg-white  border-b">
+        <div className="h-screen w-screen overflow-y-auto overflow-hidden py-1 sm:py-3">
+          <SidebarInset className="rounded-2xl ">
             <DashboardHeader />
-          </div>
-          <div className="flex-1 overflow-y-auto p-4">{<Outlet />}</div>
-        </SidebarInset>
+            <div className="flex-1 overflow-y-auto p-4">{<Outlet />}</div>
+          </SidebarInset>
+        </div>
       </SidebarProvider>
     </Suspense>
   );
