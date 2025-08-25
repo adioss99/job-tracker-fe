@@ -42,9 +42,8 @@ const JobEditPage = () => {
   useEffect(() => {
     console.log("isSubmitted", isSubmitted);
     if (isSubmitted) {
-      const watchedValues =
-        JSON.stringify(payload) !== JSON.stringify(data?.data);
-      if (watchedValues) {
+      const isSame = JSON.stringify(payload) !== JSON.stringify(data?.data);
+      if (isSame) {
         toast.info("Nothing has changed. \nUpdate not saved!");
       } else {
         submit();

@@ -78,7 +78,7 @@ export const SidebarComponent: React.FC<SidebarComponentProps> = ({
   };
   return (
     <>
-      <Sidebar collapsible="offcanvas" variant="inset">
+      <Sidebar collapsible="icon" variant="inset">
         <SidebarHeader>
           <Link
             className="flex flex-row justify-center w-full mb-2 mt-4"
@@ -88,7 +88,7 @@ export const SidebarComponent: React.FC<SidebarComponentProps> = ({
               className="w-8"
               src="/web-app-manifest-192x192.png"
             />
-            <h1 className="text-2xl font-bold ml-2">JobTrack</h1>
+            <h1 className="truncate text-2xl font-bold ml-2">JobTrack</h1>
           </Link>
         </SidebarHeader>
         <SidebarContent>
