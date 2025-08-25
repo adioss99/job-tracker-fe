@@ -12,11 +12,12 @@ export function useAutoRefresh() {
       async () => {
         try {
           await getRefreshToken();
+          console.log("token refreshed");
         } catch (err) {
           throw new Error("❌ refresh error" + err);
         }
       },
-      (14 * 60 + 58) * 1000
+      (14 * 60 + 45) * 1000
     );
     return () => {
       clearInterval(interval);

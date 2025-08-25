@@ -8,9 +8,13 @@ import { SidebarComponent } from "@/components/sidebar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 
 const menuItems = [
-  { title: "Dashboard", url: "/dashboard", icon: CircleGauge },
-  { title: "Job List", url: "/list-job", icon: List },
-  { title: "Add New Job", url: "/add-job", icon: CirclePlus },
+  {
+    title: "Dashboard",
+    url: "/dashboard",
+    icon: CircleGauge,
+  },
+  { title: "Job List", url: "/job", icon: List },
+  { title: "Add New Job", url: "/job/add", icon: CirclePlus },
 ];
 export const DashboardLayout: React.FC = () => {
   return (

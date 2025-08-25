@@ -14,8 +14,6 @@ const JobAddPage: React.FC = () => {
     if (isSubmitted) {
       const submit = async () => {
         const res = await addJob({ ...payload });
-        console.log(payload);
-        console.log(res);
         if (res.success) {
           toast.success("Add job successful!");
           resetForm();

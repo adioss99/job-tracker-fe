@@ -17,6 +17,7 @@ const DashboardPage = lazy(() => import("@/pages/dashboard"));
 const ProfilePage = lazy(() => import("@/pages/profile"));
 const JobListPage = lazy(() => import("@/pages/job-list"));
 const JobAddPage = lazy(() => import("@/pages/job-add"));
+const JobEditPage = lazy(() => import("@/pages/job-edit"));
 
 export const appRouter = createBrowserRouter([
   {
@@ -60,12 +61,16 @@ export const appRouter = createBrowserRouter([
                 Component: DashboardPage,
               },
               {
-                path: "/list-job",
+                path: "/job",
                 Component: JobListPage,
               },
               {
-                path: "/add-job",
+                path: "/job/add",
                 Component: JobAddPage,
+              },
+              {
+                path: "/job/edit/:id",
+                Component: JobEditPage,
               },
               {
                 path: "/dashboard",

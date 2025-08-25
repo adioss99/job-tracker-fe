@@ -26,7 +26,7 @@ import { useLogout } from "@/hooks/use-auth";
 type MenuItem = {
   title: string;
   url: string;
-  icon?: LucideIcon;
+  icon: LucideIcon;
 };
 type SidebarComponentProps = {
   menuItems: MenuItem[];
@@ -72,7 +72,13 @@ const DropDownMenuItem = () => {
 export const SidebarComponent: React.FC<SidebarComponentProps> = ({
   menuItems: items,
 }) => {
-  const location = useLocation();
+  const { pathname } = useLocation();
+  const isActive = (url: string) => {
+    return (
+      pathname === url ||
+      (pathname.startsWith(url) && !pathname.startsWith("/job/add"))
+    );
+  };
   return (
     <>
       <Sidebar collapsible="offcanvas" variant="inset">
@@ -97,7 +103,7 @@ export const SidebarComponent: React.FC<SidebarComponentProps> = ({
                     <SidebarMenuButton
                       className={
                         " font-medium " +
-                        (location.pathname === item.url
+                        (isActive(item.url)
                           ? "bg-black text-white hover:bg-black hover:text-white"
                           : "hover:bg-gray-200")
                       }

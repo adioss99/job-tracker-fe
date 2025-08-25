@@ -10,7 +10,7 @@ import type {
   UserProfileResponse,
   LoginResponse,
   RegisterResponse,
-} from "@/ts/interface/auth-interface";
+} from "@/types/auth-interface";
 
 export const useLogin = () => {
   const setAuthToken = usePersistStore((state) => state.setAuthToken);

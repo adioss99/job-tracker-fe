@@ -31,48 +31,55 @@ import {
 import { Separator } from "@/components/ui/separator";
 
 import { useJobForm } from "@/stores/use-job-form";
+import type { JobRequest } from "@/types/job-interfaces";
 import { type AddJobFormData, addJobSchema } from "@/validation/job-validation";
 
 interface JobFormProps {
   pageTitle: string;
   isLoading: boolean;
+  payload?: JobRequest;
 }
 
-const roles = ["Full Time", "Part Time", "Internship", "Contract", "Freelance"];
+const roles = ["Full Time", "Part Time", "Freelance", "Contract", "Internship"];
 const types = ["Onsite", "Remote", "Hybrid"];
 const sources = [
   "LinkedIn",
-  "Indeed",
-  "Socmed",
   "Glints",
+  "Socmed",
   "Jobstreet",
+  "Indeed",
   "Other",
 ];
 const applyOns = [
   "InApp",
   "Email",
   "Company Web",
-  "Whatsapp",
   "GoogleForm",
+  "Whatsapp",
   "Other",
 ];
 
-export const JobForm: React.FC<JobFormProps> = ({ pageTitle, isLoading }) => {
+export const JobForm: React.FC<JobFormProps> = ({
+  pageTitle,
+  isLoading,
+  payload,
+}) => {
   const [open, setOpen] = useState(false);
   const setFormData = useJobForm((state) => state.setFormData);
 
+  const date = payload?.applyDate ? new Date(payload.applyDate) : new Date();
   const form = useForm<AddJobFormData>({
     resolver: zodResolver(addJobSchema),
     defaultValues: {
-      title: "",
-      company: "",
-      role: "Full Time",
-      type: "Onsite",
-      source: "Other",
-      sourceLink: "",
-      location: "",
-      applyDate: new Date(),
-      applyOn: "InApp",
+      title: payload?.title || "",
+      company: payload?.company || "",
+      role: payload?.role || "Full Time",
+      type: payload?.type || "Onsite",
+      source: payload?.source || "Other",
+      sourceLink: payload?.sourceLink || "",
+      location: payload?.location || "",
+      applyDate: date,
+      applyOn: payload?.applyOn || "InApp",
     },
   });
 
@@ -141,7 +148,11 @@ export const JobForm: React.FC<JobFormProps> = ({ pageTitle, isLoading }) => {
                       className="w-full rounded-xl"
                       placeholder=""
                       type="text"
-                      {...field}
+                      {...{
+                        ...field,
+                        onChange: (e) =>
+                          field.onChange(e.target.value.toUpperCase()),
+                      }}
                     />
                   </FormControl>
                 </FormItem>
@@ -153,7 +164,7 @@ export const JobForm: React.FC<JobFormProps> = ({ pageTitle, isLoading }) => {
               render={({ field }) => (
                 <FormItem className="col-span-12 sm:col-span-6 col-start-auto flex self-end flex-col gap-2 space-y-0 items-start">
                   <FormLabel>
-                    Company Location
+                    Location
                     {form.formState.errors.location && (
                       <Separator
                         className="data-[orientation=vertical]:h-4"
@@ -265,7 +276,7 @@ export const JobForm: React.FC<JobFormProps> = ({ pageTitle, isLoading }) => {
               render={({ field }) => (
                 <FormItem className="col-span-6 col-start-auto flex self-end flex-col gap-2 space-y-0 items-start">
                   <FormLabel htmlFor="source">
-                    Source
+                    Information Source
                     {form.formState.errors.source && (
                       <Separator
                         className="data-[orientation=vertical]:h-4"
@@ -382,8 +393,6 @@ export const JobForm: React.FC<JobFormProps> = ({ pageTitle, isLoading }) => {
                         </PopoverContent>
                       </Popover>
                     </FormControl>
-
-                    <FormMessage />
                   </div>
                 </FormItem>
               )}
@@ -433,7 +442,7 @@ export const JobForm: React.FC<JobFormProps> = ({ pageTitle, isLoading }) => {
               <div className="w-full flex justify-end">
                 <FormControl>
                   <Button
-                    className="rounded-xl w-full sm:w-32"
+                    className="rounded-xl w-full sm:w-64"
                     disabled={isLoading}
                     id="submit-button-0"
                     key="submit-button-0"

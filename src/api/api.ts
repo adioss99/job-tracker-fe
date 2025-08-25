@@ -1,6 +1,6 @@
 import { getAuthId } from "@/helper/code-roles";
 import { usePersistStore } from "@/stores/use-persist"; // your Zustand store
-import type { RefreshTokenResponse } from "@/ts/interface/auth-interface";
+import type { RefreshTokenResponse } from "@/types/auth-interface";
 
 export async function apiFetch<T>(
   endpoint: RequestInfo,

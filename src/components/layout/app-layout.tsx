@@ -8,7 +8,11 @@ export const AppLayout = () => {
   return (
     <Suspense fallback={<Loading />}>
       <div className="w-full h-full flex items-center justify-center bg-[#eff3fa]">
-        <ToastContainer pauseOnFocusLoss={false} closeOnClick />
+        <ToastContainer
+          autoClose={3000}
+          pauseOnFocusLoss={false}
+          closeOnClick
+        />
         {<Outlet />}
       </div>
     </Suspense>
