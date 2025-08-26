@@ -29,6 +29,9 @@ export const useLogin = () => {
         });
       }
     },
+    onError: () => {
+      throw new Error("Internal Server Error");
+    },
     retry: false,
   });
 };
@@ -41,6 +44,9 @@ export const useRegister = () => {
         method: "POST",
         body: JSON.stringify(payload),
       }),
+    onError: () => {
+      throw new Error("Internal Server Error");
+    },
     retry: false,
   });
 };
@@ -54,6 +60,10 @@ export const useLogout = () => {
     retry: false,
     onSuccess: () => {
       reset();
+    },
+    onError: () => {
+      reset();
+      throw new Error("Something went wrong");
     },
   });
 };
@@ -83,6 +93,10 @@ export const useGetRefreshToken = () => {
       } else {
         reset();
       }
+    },
+    onError: () => {
+      reset();
+      throw new Error("Internal Server Error");
     },
     retry: false,
   });

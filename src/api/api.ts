@@ -25,13 +25,13 @@ export async function apiFetch<T>(
   const resJson = await res.json();
 
   if (res.status === 401 && resJson.message === "Token invalid") {
-    const persist = usePersistStore.getState();
+    const { setAuthToken, reset } = usePersistStore.getState();
     // try refresh
     try {
       const refreshRes = await getRefreshToken(); // will use cookies
       if (refreshRes.success) {
         // update Zustand with new token
-        persist.setAuthToken({
+        setAuthToken({
           token: refreshRes.accessToken,
           _user: getAuthId(refreshRes.data.id),
         });
@@ -39,11 +39,11 @@ export async function apiFetch<T>(
         res = await doFetch(refreshRes.accessToken);
       } else {
         // refresh failed, logout
-        persist.reset();
+        reset();
         throw new Error("Unauthorized - refresh failed");
       }
     } catch (err) {
-      persist.reset();
+      reset();
       throw new Error("Fetch error: " + err);
     }
   }
