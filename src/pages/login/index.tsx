@@ -18,12 +18,12 @@ import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/ui/password-input";
 
 import { useLogin } from "@/hooks/use-auth";
-import { useTitle } from "@/stores/use-title";
+import { useTitle } from "@/stores/use-utils";
 import { loginSchema, type LoginFormData } from "@/validation/auth-validation";
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
-  const { mutateAsync, isPending, isError } = useLogin();
+  const { mutateAsync, isPending } = useLogin();
   const setTitle = useTitle((state) => state.setTitle);
   useEffect(() => {
     setTitle("Login");
@@ -43,12 +43,6 @@ const LoginPage: React.FC = () => {
       toast.error("Login failed. \nPlease check your credentials.");
     }
   };
-  if (isError) {
-    toast.error("Something went wrong with the server", {
-      autoClose: 2000,
-    });
-    throw new Error("Something went wrong with the server");
-  }
   return (
     <div className="w-full">
       <Form {...form}>

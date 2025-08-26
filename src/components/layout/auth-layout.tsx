@@ -3,7 +3,7 @@ import { Outlet } from "react-router";
 
 import { Loading } from "@/components/loading";
 
-import { useTitle } from "@/stores/use-title";
+import { useTitle } from "@/stores/use-utils";
 
 export const AuthLayout = () => {
   const getTItle = useTitle((state) => state.title);
