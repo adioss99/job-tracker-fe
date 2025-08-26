@@ -36,3 +36,17 @@ export type JobPayloadType = {
 
 export type JobResponse = ApiResponse<JobPayloadType>;
 export type JobRequest = JobPayloadType;
+export type JobListResponse = ApiResponse<
+  Array<
+    JobPayloadType & {
+      id: string;
+      latestStatus: string;
+    }
+  >
+> & {
+  pagination: {
+    currentPage: number;
+    totalItems: number;
+    totalPages: number;
+  };
+};

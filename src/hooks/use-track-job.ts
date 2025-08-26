@@ -1,12 +1,16 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 import { apiFetch } from "@/api/api";
-import type { JobRequest, JobResponse } from "@/types/job-interfaces";
+import type {
+  JobListResponse,
+  JobRequest,
+  JobResponse,
+} from "@/types/job-interfaces";
 
 export const useGetJobList = () => {
   return useQuery({
     queryKey: ["getJobList"],
-    queryFn: () => apiFetch<JobResponse[]>("/api/job", { method: "GET" }),
+    queryFn: () => apiFetch<JobListResponse>("/api/jobs", { method: "GET" }),
     retry: false,
     staleTime: 1000 * 10,
   });
@@ -20,6 +24,10 @@ export const useAddJob = () => {
         method: "POST",
         body: JSON.stringify(payload),
       }),
+    onError: (err) => {
+      console.error(err);
+      throw new Error("Something went wrong");
+    },
     retry: false,
   });
 };
@@ -42,6 +50,10 @@ export const useUpdateJob = (id: string) => {
         method: "PUT",
         body: JSON.stringify(payload),
       }),
+    onError: (err) => {
+      console.error(err);
+      throw new Error("Something went wrong");
+    },
     retry: false,
   });
 };
@@ -50,7 +62,11 @@ export const useRemoveJob = (id: string) => {
   return useMutation({
     mutationKey: ["removeJob", id],
     mutationFn: () =>
-      apiFetch<JobResponse>(`/api/job/${id}`, { method: "PUT" }),
+      apiFetch<JobResponse>(`/api/job/${id}`, { method: "DELETE" }),
+    onError: (err) => {
+      console.error(err);
+      throw new Error("Something went wrong");
+    },
     retry: false,
   });
 };
