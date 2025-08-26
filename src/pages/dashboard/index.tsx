@@ -1,5 +1,5 @@
 const DashBoardPage = () => {
-  return <div>DashBoardPage</div>;
+  return <div className="min-h-screen">DashBoardPage</div>;
 };
 
 export default DashBoardPage;
