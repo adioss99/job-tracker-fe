@@ -46,7 +46,7 @@ const DropDownMenuItem = () => {
       <DropdownMenuTrigger asChild>
         <Button variant="outline">
           <Settings />
-          Settings
+          <p className="truncate">Settings</p>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
