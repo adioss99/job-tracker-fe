@@ -16,6 +16,7 @@ const JobAddPage: React.FC = () => {
         const res = await addJob({ ...payload });
         if (res.success) {
           toast.success("Add job successful!");
+          window.location.reload();
           resetForm();
         } else {
           toast.error("Add job failed!");

@@ -1,5 +1,5 @@
-import { useCallback, useEffect } from "react";
-import { useParams } from "react-router";
+import { useEffect } from "react";
+import { useNavigate, useParams } from "react-router";
 import { toast } from "react-toastify";
 
 import { JobForm } from "@/components/job-form";
@@ -9,6 +9,7 @@ import { useGetJobById, useUpdateJob } from "@/hooks/use-track-job";
 import { useJobForm } from "@/stores/use-job-form";
 
 const JobEditPage = () => {
+  const navigate = useNavigate();
   const { id } = useParams();
   const { payload, isSubmitted, resetForm } = useJobForm((state) => state);
   const { data, isLoading } = useGetJobById(id!);
@@ -19,37 +20,31 @@ const JobEditPage = () => {
       toast.error("Job not found!", {
         toastId: "jobNotFound",
       });
-      return;
+      toast.info("Redirecting in 5 seconds", {
+        toastId: "redirect",
+      });
+      setInterval(() => navigate("/job"), 4500);
     }
-  }, [data, isLoading]);
+  }, [data, isLoading, navigate]);
 
-  const submit = useCallback(
-    () => async () => {
+  useEffect(() => {
+    const handleSubmit = async () => {
       const res = await mutateAsync({ ...payload });
       if (res.success) {
         toast.success("Job updated successfully!");
         resetForm();
+        setInterval(() => navigate("/job"), 1000);
       } else {
         toast.error("Update job failed!");
       }
       if (error) {
         toast.error(error.message);
       }
-    },
-    [error, mutateAsync, payload, resetForm]
-  );
-
-  useEffect(() => {
-    console.log("isSubmitted", isSubmitted);
+    };
     if (isSubmitted) {
-      const isSame = JSON.stringify(payload) !== JSON.stringify(data?.data);
-      if (isSame) {
-        toast.info("Nothing has changed. \nUpdate not saved!");
-      } else {
-        submit();
-      }
+      handleSubmit();
     }
-  }, [isSubmitted, data, payload, submit, error, mutateAsync, resetForm]);
+  }, [isSubmitted, data, payload, error, resetForm, mutateAsync, navigate]);
 
   if (isLoading) return <Loading />;
   return (
