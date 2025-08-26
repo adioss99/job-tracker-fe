@@ -4,6 +4,7 @@ import { CalendarIcon, Link, Loader2Icon } from "lucide-react";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 
+import { ModalDialog } from "@/components/modal";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -442,10 +443,10 @@ export const JobForm: React.FC<JobFormProps> = ({
               <div className="w-full flex justify-end">
                 <FormControl>
                   <Button
-                    className="rounded-xl w-full sm:w-64"
+                    className={`rounded-xl w-full sm:w-64 ${payload && !isLoading && "hidden"}`}
                     disabled={isLoading}
-                    id="submit-button-0"
-                    key="submit-button-0"
+                    id="submit-button-1"
+                    key="submit-button-1"
                     name=""
                     type="submit"
                     variant="default">
@@ -455,10 +456,33 @@ export const JobForm: React.FC<JobFormProps> = ({
                         Loading...
                       </>
                     ) : (
-                      "Submit"
+                      "Update"
                     )}
                   </Button>
                 </FormControl>
+                {payload && !isLoading && (
+                  <FormControl>
+                    <ModalDialog
+                      buttonConfirm={
+                        <Button
+                          onClick={() => {
+                            document.getElementById("submit-button-1")?.click();
+                          }}>
+                          Update
+                        </Button>
+                      }
+                      children="Are you sure you want to update this job?"
+                      dialogTitle="Update Job"
+                      modalTrigger={
+                        <Button
+                          className={`rounded-xl w-full sm:w-64`}
+                          variant="default">
+                          Update
+                        </Button>
+                      }
+                    />
+                  </FormControl>
+                )}
               </div>
             </FormItem>
           </div>
