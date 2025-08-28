@@ -42,7 +42,7 @@ export const ActionButton = ({ id }: { id: string }) => {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-32">
-        <Link className="flex gap-2 items-center px-1" to={`#`}>
+        <Link className="flex gap-2 items-center px-1" to={`/job/${id}`}>
           <DropdownMenuItem className="w-full">
             <Eye />
             Details
