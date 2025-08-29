@@ -1,5 +1,5 @@
-import { useEffect } from "react";
-import { useNavigate, useParams } from "react-router";
+import { useEffect, useState } from "react";
+import { Navigate, useNavigate, useParams } from "react-router";
 import { toast } from "react-toastify";
 
 import { JobForm } from "@/components/job-form";
@@ -10,6 +10,7 @@ import { useJobForm } from "@/stores/use-job-form";
 
 const JobEditPage = () => {
   const navigate = useNavigate();
+  const [redirect, setRedirect] = useState(false);
   const { id } = useParams();
   const { payload, isSubmitted, resetForm } = useJobForm((state) => state);
   const { data, isLoading } = useGetJobById(id!);
@@ -33,7 +34,7 @@ const JobEditPage = () => {
       if (res.success) {
         toast.success("Job updated successfully!");
         resetForm();
-        setInterval(() => navigate("/job"), 1000);
+        setInterval(() => setRedirect(true), 1000);
       } else {
         toast.error("Update job failed!");
       }
@@ -45,6 +46,8 @@ const JobEditPage = () => {
       handleSubmit();
     }
   }, [isSubmitted, data, payload, error, resetForm, mutateAsync, navigate]);
+
+  if (redirect) return <Navigate to="/job" replace />;
 
   if (isLoading) return <Loading />;
   return (
