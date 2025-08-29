@@ -1,7 +1,6 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 import { apiFetch } from "@/api/api";
-import { getAuthId } from "@/helper/code-roles";
 import { usePersistStore } from "@/stores/use-persist";
 import type {
   LoginRequest,
@@ -11,6 +10,7 @@ import type {
   LoginResponse,
   RegisterResponse,
 } from "@/types/auth-interface";
+import { getAuthId } from "@/utils/code-roles";
 
 export const useLogin = () => {
   const setAuthToken = usePersistStore((state) => state.setAuthToken);
