@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/ui/password-input";
+import { Separator } from "@/components/ui/separator";
 
 import { useRegister } from "@/hooks/use-auth";
 import { useTitle } from "@/stores/use-utils";
@@ -95,7 +96,7 @@ const RegisterPage: React.FC = () => {
               </FormItem>
             )}
           />
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-0.5 mt-2">
             <Button className="w-full" disabled={isPending}>
               {isPending ? (
                 <>
@@ -105,7 +106,14 @@ const RegisterPage: React.FC = () => {
               ) : (
                 "Register"
               )}
-            </Button>
+            </Button>{" "}
+            <div className="overflow-x-hidden">
+              <div className="flex flex-row justify-center items-center gap-2">
+                <Separator />
+                <span className="text-center text-xs font-extralight">or</span>
+                <Separator className="w-fit" />
+              </div>
+            </div>
             <Link to={"/login"}>
               <Button className="w-full" variant="outline">
                 Login

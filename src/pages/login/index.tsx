@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/ui/password-input";
+import { Separator } from "@/components/ui/separator";
 
 import { useLogin } from "@/hooks/use-auth";
 import { useTitle } from "@/stores/use-utils";
@@ -54,7 +55,7 @@ const LoginPage: React.FC = () => {
               <FormItem className="min-h-15">
                 <FormLabel className="ml-1">Email</FormLabel>
                 <FormControl>
-                  <Input placeholder="insert your email" {...field} />
+                  <Input placeholder="your@email.com" {...field} />
                 </FormControl>
                 <FormMessage className="ml-1" />
               </FormItem>
@@ -76,7 +77,7 @@ const LoginPage: React.FC = () => {
               </FormItem>
             )}
           />
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-0.5 mt-2">
             <Button className="w-full" disabled={isPending} type="submit">
               {isPending ? (
                 <>
@@ -87,6 +88,13 @@ const LoginPage: React.FC = () => {
                 "Login"
               )}
             </Button>
+            <div className="overflow-x-hidden">
+              <div className="flex flex-row justify-center items-center gap-2">
+                <Separator />
+                <span className="text-center text-xs font-extralight">or</span>
+                <Separator className="w-fit" />
+              </div>
+            </div>
             <Link to={"/register"}>
               <Button className="w-full" variant="outline">
                 Register
