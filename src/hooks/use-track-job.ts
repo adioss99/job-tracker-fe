@@ -1,6 +1,7 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 import { apiFetch } from "@/api/api";
+import { queryClient } from "@/main";
 import type {
   JobListResponse,
   JobRequest,
@@ -12,7 +13,7 @@ export const useGetJobList = () => {
     queryKey: ["getJobList"],
     queryFn: () => apiFetch<JobListResponse>("/api/jobs", { method: "GET" }),
     retry: false,
-    staleTime: 1000 * 10,
+    staleTime: 5 * 60 * 1000,
   });
 };
 
@@ -27,6 +28,9 @@ export const useAddJob = () => {
     onError: (err) => {
       console.error(err);
       throw new Error("Something went wrong");
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["getJobList"] });
     },
     retry: false,
   });
@@ -54,6 +58,10 @@ export const useUpdateJob = (id: string) => {
       console.error(err);
       throw new Error("Something went wrong");
     },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["getJobById", id] });
+      queryClient.invalidateQueries({ queryKey: ["getJobList"] });
+    },
     retry: false,
   });
 };
@@ -66,6 +74,9 @@ export const useRemoveJob = (id: string) => {
     onError: (err) => {
       console.error(err);
       throw new Error("Something went wrong");
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["getJobList"] });
     },
     retry: false,
   });

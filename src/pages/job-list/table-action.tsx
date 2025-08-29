@@ -23,7 +23,6 @@ export const ActionButton = ({ id }: { id: string }) => {
     const res = await removeJob();
     if (res.success) {
       toast.success("Delete job successful!");
-      window.location.reload();
     } else {
       toast.error("Delete job failed!");
     }
