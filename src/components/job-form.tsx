@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
-import { CalendarIcon, Link, Loader2Icon } from "lucide-react";
+import { CalendarIcon, Edit, Link, Loader2Icon } from "lucide-react";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -66,6 +66,7 @@ export const JobForm: React.FC<JobFormProps> = ({
   payload,
 }) => {
   const [open, setOpen] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
   const setFormData = useJobForm((state) => state.setFormData);
 
   const date = payload?.applyDate ? new Date(payload.applyDate) : new Date();
@@ -76,7 +77,7 @@ export const JobForm: React.FC<JobFormProps> = ({
       company: payload?.company || "",
       role: payload?.role || "Full Time",
       type: payload?.type || "Onsite",
-      source: payload?.source || "Other",
+      source: payload?.source || "LinkedIn",
       sourceLink: payload?.sourceLink || "",
       location: payload?.location || "",
       applyDate: date,
@@ -446,10 +447,7 @@ export const JobForm: React.FC<JobFormProps> = ({
                     className={`rounded-xl w-full sm:w-64 ${payload && !isLoading && "hidden"}`}
                     disabled={isLoading}
                     id="submit-button-1"
-                    key="submit-button-1"
-                    name=""
-                    type="submit"
-                    variant="default">
+                    type="submit">
                     {isLoading ? (
                       <>
                         <Loader2Icon className="animate-spin" />
@@ -462,25 +460,34 @@ export const JobForm: React.FC<JobFormProps> = ({
                 </FormControl>
                 {payload && !isLoading && (
                   <FormControl>
-                    <ModalDialog
-                      buttonConfirm={
-                        <Button
-                          onClick={() => {
-                            document.getElementById("submit-button-1")?.click();
-                          }}>
-                          Update
-                        </Button>
-                      }
-                      children="Are you sure you want to update this job?"
-                      dialogTitle="Update Job"
-                      modalTrigger={
-                        <Button
-                          className={`rounded-xl w-full sm:w-64`}
-                          variant="default">
-                          Update
-                        </Button>
-                      }
-                    />
+                    <div>
+                      <Button
+                        className={`rounded-xl w-full sm:w-64 ${isLoading && "hidden"}`}
+                        type="button"
+                        onClick={() => {
+                          setDialogOpen(true);
+                        }}>
+                        <Edit />
+                        Edit
+                      </Button>
+                      <ModalDialog
+                        buttonConfirm={
+                          <Button
+                            onClick={() => {
+                              document
+                                .getElementById("submit-button-1")
+                                ?.click();
+                            }}>
+                            <Edit />
+                            Confirm
+                          </Button>
+                        }
+                        children="Are you sure you want to update this job?"
+                        dialogTitle="Update Job"
+                        open={dialogOpen}
+                        onOpenChange={setDialogOpen}
+                      />
+                    </div>
                   </FormControl>
                 )}
               </div>

@@ -1,20 +1,20 @@
 import type { ApiResponse } from "./api-interface";
 
-type roles =
+type RolesType =
   | "Full Time"
   | "Part Time"
   | "Internship"
   | "Contract"
   | "Freelance";
-type types = "Onsite" | "Remote" | "Hybrid";
-type sources =
+type TypesType = "Onsite" | "Remote" | "Hybrid";
+type SourcesType =
   | "LinkedIn"
   | "Indeed"
   | "Socmed"
   | "Glints"
   | "Jobstreet"
   | "Other";
-type applyOns =
+type ApplyOnsType =
   | "InApp"
   | "Email"
   | "Company Web"
@@ -25,13 +25,13 @@ type applyOns =
 export type JobPayloadType = {
   title: string;
   company: string;
-  role: roles;
-  type: types;
-  source: sources;
+  role: RolesType;
+  type: TypesType;
+  source: SourcesType;
   sourceLink?: string;
   location: string;
   applyDate: Date;
-  applyOn: applyOns;
+  applyOn: ApplyOnsType;
 };
 
 export type JobResponse = ApiResponse<JobPayloadType>;
@@ -49,4 +49,8 @@ export type JobListResponse = ApiResponse<
     totalItems: number;
     totalPages: number;
   };
+};
+
+export type JobDetailsResponse = ApiResponse<JobPayloadType> & {
+  id: string;
 };
