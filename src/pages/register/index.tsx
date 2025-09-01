@@ -59,11 +59,11 @@ const RegisterPage: React.FC = () => {
             name="name"
             render={({ field }) => (
               <FormItem className="min-h-15">
-                <FormLabel className="ml-1">Name</FormLabel>
+                <FormLabel className="ml-1 mb-1">Name</FormLabel>
                 <FormControl>
                   <Input placeholder="insert your name" {...field} />
                 </FormControl>
-                <FormMessage className="ml-1" />
+                <FormMessage className="ml-1 text-end" />
               </FormItem>
             )}
           />
@@ -72,11 +72,11 @@ const RegisterPage: React.FC = () => {
             name="email"
             render={({ field }) => (
               <FormItem className="min-h-15">
-                <FormLabel className="ml-1">Email</FormLabel>
+                <FormLabel className="ml-1 mb-1">Email</FormLabel>
                 <FormControl>
                   <Input placeholder="insert your email" {...field} />
                 </FormControl>
-                <FormMessage className="ml-1" />
+                <FormMessage className="ml-1 text-end" />
               </FormItem>
             )}
           />
@@ -85,14 +85,14 @@ const RegisterPage: React.FC = () => {
             name="password"
             render={({ field }) => (
               <FormItem className="min-h-15">
-                <FormLabel className="ml-1">Password</FormLabel>
+                <FormLabel className="ml-1 mb-1">Password</FormLabel>
                 <FormControl>
                   <PasswordInput
                     placeholder="Insert your password"
                     {...field}
                   />
                 </FormControl>
-                <FormMessage className="ml-1" />
+                <FormMessage className="ml-1 text-end" />
               </FormItem>
             )}
           />
