@@ -94,7 +94,7 @@ export const JobForm: React.FC<JobFormProps> = ({
       <Form {...form}>
         <form
           autoComplete="off"
-          className="w-full bg-white sm:p-5 md:p-2 rounded-xl"
+          className="w-full bg-white sm:p-5 md:p-2"
           onSubmit={form.handleSubmit(onSubmit)}>
           <div className="grid grid-cols-12 gap-3">
             <h1
@@ -121,7 +121,7 @@ export const JobForm: React.FC<JobFormProps> = ({
                   </FormLabel>
                   <FormControl>
                     <Input
-                      className="w-full rounded-xl"
+                      className="w-full"
                       placeholder=""
                       type="text"
                       {...field}
@@ -147,7 +147,7 @@ export const JobForm: React.FC<JobFormProps> = ({
                   </FormLabel>
                   <FormControl>
                     <Input
-                      className="w-full rounded-xl"
+                      className="w-full"
                       placeholder=""
                       type="text"
                       {...{
@@ -177,7 +177,7 @@ export const JobForm: React.FC<JobFormProps> = ({
                   </FormLabel>
                   <FormControl>
                     <Input
-                      className="w-full rounded-xl"
+                      className="w-full"
                       placeholder=""
                       type="text"
                       {...field}
@@ -256,7 +256,7 @@ export const JobForm: React.FC<JobFormProps> = ({
                         key="role"
                         {...field}
                         onValueChange={field.onChange}>
-                        <SelectTrigger className="w-full rounded-xl" id="role">
+                        <SelectTrigger className="w-full" id="role">
                           <SelectValue placeholder="" />
                         </SelectTrigger>
                         <SelectContent>
@@ -294,9 +294,7 @@ export const JobForm: React.FC<JobFormProps> = ({
                         key="source-jkl"
                         {...field}
                         onValueChange={field.onChange}>
-                        <SelectTrigger
-                          className="w-full rounded-xl "
-                          id="source">
+                        <SelectTrigger className="w-full" id="source">
                           <SelectValue placeholder="" />
                         </SelectTrigger>
                         <SelectContent>
@@ -330,7 +328,7 @@ export const JobForm: React.FC<JobFormProps> = ({
                   <FormControl>
                     <div className="relative w-full">
                       <Input
-                        className="ps-8 rounded-xl"
+                        className="ps-8"
                         id="sourceLink"
                         key="sourceLink"
                         placeholder=""
@@ -368,7 +366,7 @@ export const JobForm: React.FC<JobFormProps> = ({
                     <FormControl>
                       <Popover open={open} onOpenChange={setOpen}>
                         <PopoverTrigger
-                          className="justify-start text-left font-normal w-full rounded-xl h-9"
+                          className="justify-start text-left font-normal w-full h-9"
                           asChild>
                           <Button
                             id="applyDate"
@@ -422,9 +420,7 @@ export const JobForm: React.FC<JobFormProps> = ({
                         key="source"
                         {...field}
                         onValueChange={field.onChange}>
-                        <SelectTrigger
-                          className="w-full rounded-xl "
-                          id="applyOn">
+                        <SelectTrigger className="w-full" id="applyOn">
                           <SelectValue placeholder="" />
                         </SelectTrigger>
                         <SelectContent>
@@ -444,7 +440,7 @@ export const JobForm: React.FC<JobFormProps> = ({
               <div className="w-full flex justify-end">
                 <FormControl>
                   <Button
-                    className={`rounded-xl w-full sm:w-64 ${payload && !isLoading && "hidden"}`}
+                    className={`w-full sm:w-64 ${payload && !isLoading && "hidden"}`}
                     disabled={isLoading}
                     id="submit-button-1"
                     type="submit">
@@ -462,7 +458,7 @@ export const JobForm: React.FC<JobFormProps> = ({
                   <FormControl>
                     <div>
                       <Button
-                        className={`rounded-xl w-full sm:w-64 ${isLoading && "hidden"}`}
+                        className={`w-full sm:w-64 ${isLoading && "hidden"}`}
                         type="button"
                         onClick={() => {
                           setDialogOpen(true);
