@@ -19,7 +19,7 @@ export const DashboardLayout: React.FC = () => {
       <SidebarProvider>
         <SidebarComponent menuItems={menuItems} />
         <div className="h-screen w-screen overflow-y-auto overflow-hidden py-0 sm:py-3">
-          <SidebarInset className="rounded-2xl ">
+          <SidebarInset className="rounded-2xl min-h-full">
             <DashboardHeader />
             <Separator />
             <div className="flex-1 overflow-y-auto p-4">{<Outlet />}</div>

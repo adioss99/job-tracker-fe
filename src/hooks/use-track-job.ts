@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 
-import { apiFetch } from "@/api/api";
+import { apiFetch } from "@/api";
 import { queryClient } from "@/main";
 import type {
   JobListResponse,

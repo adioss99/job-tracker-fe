@@ -1,3 +1,5 @@
+import { toast } from "react-toastify";
+
 import { usePersistStore } from "@/stores/use-persist"; // your Zustand store
 import type { RefreshTokenResponse } from "@/types/auth-interface";
 import { getAuthId } from "@/utils/code-roles";
@@ -7,8 +9,10 @@ export async function apiFetch<T>(
   init?: RequestInit
 ): Promise<T> {
   const token = usePersistStore.getState().auth.token;
+  const { setAuthToken, reset } = usePersistStore.getState();
 
   const doFetch = async (accessToken?: string): Promise<Response> => {
+    console.log(init);
     const res = await fetch(endpoint, {
       ...init,
       headers: {
@@ -25,7 +29,6 @@ export async function apiFetch<T>(
   const resJson = await res.json();
 
   if (res.status === 401 && resJson.message === "Token invalid") {
-    const { setAuthToken, reset } = usePersistStore.getState();
     // try refresh
     try {
       const refreshRes = await getRefreshToken(); // will use cookies
@@ -46,6 +49,10 @@ export async function apiFetch<T>(
       reset();
       throw new Error("Fetch error: " + err);
     }
+  } else if (res.status === 500) {
+    toast.error("Internal Server Error");
+    reset();
+    throw new Error("Internal Server Error");
   }
 
   return resJson;

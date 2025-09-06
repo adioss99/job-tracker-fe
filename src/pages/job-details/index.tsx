@@ -79,7 +79,7 @@ const JobDetailsPage: React.FC = () => {
           </Button>
         </Link>
       </div>
-      {/* <pre>{JSON.stringify(res, null, 2)}</pre> */}
+      <pre>{JSON.stringify(res, null, 2)}</pre>
     </>
   );
 };
