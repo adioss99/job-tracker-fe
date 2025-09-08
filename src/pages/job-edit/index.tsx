@@ -33,7 +33,7 @@ const JobEditPage = () => {
       if (res.success) {
         toast.success("Job updated successfully!");
         resetForm();
-        setInterval(() => navigate(`/job`, { replace: true }), 1000);
+        navigate(`/job/${id}`, { replace: true });
       } else {
         toast.error("Update job failed!");
       }

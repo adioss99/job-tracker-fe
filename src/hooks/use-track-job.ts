@@ -3,6 +3,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { apiFetch } from "@/api";
 import { queryClient } from "@/main";
 import type {
+  JobDetailsResponse,
   JobListResponse,
   JobRequest,
   JobResponse,
@@ -39,10 +40,11 @@ export const useAddJob = () => {
 export const useGetJobById = (id: string) => {
   return useQuery({
     queryKey: ["getJobById", id],
-    queryFn: () => apiFetch<JobResponse>(`/api/job/${id}`, { method: "GET" }),
+    queryFn: () =>
+      apiFetch<JobDetailsResponse>(`/api/job/${id}`, { method: "GET" }),
     retry: false,
     enabled: !!id,
-    staleTime: 1000 * 10,
+    staleTime: 1000 * 10 * 60,
   });
 };
 

@@ -2,6 +2,7 @@ import { Plus } from "lucide-react";
 import { Link } from "react-router";
 
 import { Loading } from "@/components/loading";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -14,7 +15,29 @@ import {
 
 import { useGetJobList } from "@/hooks/use-track-job";
 import { ActionButton } from "@/pages/job-list/table-action";
-import { dateFormat } from "@/utils/date";
+import { dateFormat, maxTextLength } from "@/utils/formatter";
+
+const StatusBadge = ({ statuses }: { statuses: string }) => {
+  let color;
+
+  if (statuses === "No Status") {
+    color = "gray";
+  } else if (statuses === "Rejected") {
+    color = "red";
+  } else if (statuses === "Hired") {
+    color = "emerald";
+  }
+
+  return (
+    <>
+      <Badge
+        className={`bg-${color}-600/10 text-${color}-500 shadow-none rounded-full`}>
+        <div className={`h-1.5 w-1.5 rounded-full bg-${color}-500 mr-2`} />
+        {statuses}
+      </Badge>
+    </>
+  );
+};
 
 const JobList = () => {
   const { data: jobs, isLoading, error } = useGetJobList();
@@ -41,22 +64,28 @@ const JobList = () => {
               <TableHead>Role</TableHead>
               <TableHead>Type</TableHead>
               <TableHead>Status</TableHead>
-              <TableHead>Apply at</TableHead>
+              <TableHead>Applied at</TableHead>
               <TableHead className="text-center">Action</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {jobs?.data?.map((item) => (
               <TableRow key={item.id}>
-                <TableCell className="font-medium">{item.title}</TableCell>
-                <TableCell>{item.company}</TableCell>
-                <TableCell>{item.location}</TableCell>
+                <TableCell className="font-medium capitalize">
+                  {maxTextLength(item.title, 20)}
+                </TableCell>
+                <TableCell>{maxTextLength(item.company, 9)}</TableCell>
+                <TableCell>{maxTextLength(item.location, 9)}</TableCell>
                 <TableCell>
                   {item.role.charAt(0).toUpperCase() + item.role.slice(1)}
                 </TableCell>
                 <TableCell>{item.type}</TableCell>
-                <TableCell>{item.latestStatus}</TableCell>
-                <TableCell>{dateFormat(item.applyDate).local}</TableCell>
+                <TableCell>
+                  <StatusBadge statuses={item.latestStatus} />
+                </TableCell>
+                <TableCell className="text-end">
+                  {dateFormat(item.applyDate).local}
+                </TableCell>
                 <TableCell className="flex justify-center">
                   <ActionButton id={item.id} />
                 </TableCell>

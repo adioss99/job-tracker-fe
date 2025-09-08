@@ -34,6 +34,12 @@ export type JobPayloadType = {
   applyOn: ApplyOnsType;
 };
 
+export type JobStatusesType = {
+  id: string;
+  status: string;
+  addDate: Date;
+};
+
 export type JobResponse = ApiResponse<JobPayloadType>;
 export type JobRequest = JobPayloadType;
 export type JobListResponse = ApiResponse<
@@ -51,6 +57,8 @@ export type JobListResponse = ApiResponse<
   };
 };
 
-export type JobDetailsResponse = ApiResponse<JobPayloadType> & {
+export type JobDetailsResponse = ApiResponse<
+  JobPayloadType & { statuses: JobStatusesType[] }
+> & {
   id: string;
 };

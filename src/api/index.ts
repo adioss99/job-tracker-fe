@@ -12,7 +12,6 @@ export async function apiFetch<T>(
   const { setAuthToken, reset } = usePersistStore.getState();
 
   const doFetch = async (accessToken?: string): Promise<Response> => {
-    console.log(init);
     const res = await fetch(endpoint, {
       ...init,
       headers: {

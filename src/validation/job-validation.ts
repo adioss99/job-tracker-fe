@@ -1,8 +1,14 @@
 import { z } from "zod";
 
 export const addJobSchema = z.object({
-  title: z.string().min(3),
-  company: z.string().min(3),
+  title: z
+    .string()
+    .min(3, { message: "Title must be at least 3 characters" })
+    .max(50, { message: "Title must be at most 50 characters" }),
+  company: z
+    .string()
+    .min(3, { message: "Title must be at least 3 characters" })
+    .max(50, { message: "Title must be at most 50 characters" }),
   role: z.enum([
     "Full Time",
     "Part Time",
