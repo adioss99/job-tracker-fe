@@ -49,12 +49,13 @@ export const JobStatusTimeline = ({
           <Button
             variant={"outline"}
             onClick={() => {
-              // handleDeleteJob();
+              document.getElementById("submit-status-form")?.click();
             }}>
             Add
           </Button>
         }
         children={<StatusFormComponent method="add" />}
+        closeOnConfirm={false}
         dialogTitle="Add new Status"
         open={dialogOpen}
         onOpenChange={setDialogOpen}

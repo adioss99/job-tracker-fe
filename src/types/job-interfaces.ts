@@ -35,7 +35,6 @@ export type JobPayloadType = {
 };
 
 export type JobStatusesType = {
-  id: string;
   status: string;
   addDate: Date;
 };
@@ -62,3 +61,6 @@ export type JobDetailsResponse = ApiResponse<
 > & {
   id: string;
 };
+
+export type JobStatusesRequest = JobStatusesType;
+export type JobStatusesResponse = ApiResponse<JobStatusesType>;

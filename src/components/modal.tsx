@@ -20,6 +20,7 @@ type ModalProps = {
   buttonConfirm?: ReactNode;
   buttonClose?: string;
   open?: boolean;
+  closeOnConfirm?: boolean;
   onOpenChange?: (open: boolean) => void;
 };
 export const ModalDialog = ({
@@ -31,6 +32,7 @@ export const ModalDialog = ({
   children,
   buttonConfirm,
   buttonClose = "Cancel",
+  closeOnConfirm = true,
 }: ModalProps) => {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -47,9 +49,13 @@ export const ModalDialog = ({
         </div>
         <DialogFooter>
           <DialogClose asChild>
-            <Button variant="outline">{buttonClose}</Button>
+            <Button variant="ghost">{buttonClose}</Button>
           </DialogClose>
-          <DialogClose asChild>{buttonConfirm}</DialogClose>
+          {closeOnConfirm ? (
+            <DialogClose asChild>{buttonConfirm}</DialogClose>
+          ) : (
+            <>{buttonConfirm}</>
+          )}
         </DialogFooter>
       </DialogContent>
     </Dialog>

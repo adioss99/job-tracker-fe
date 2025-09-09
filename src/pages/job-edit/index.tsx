@@ -44,7 +44,7 @@ const JobEditPage = () => {
     if (isSubmitted) {
       handleSubmit();
     }
-  }, [isSubmitted, data, payload, error, resetForm, mutateAsync, navigate]);
+  }, [id, isSubmitted, data, payload, error, resetForm, mutateAsync, navigate]);
 
   if (isLoading) return <Loading />;
   return (

@@ -39,7 +39,7 @@ export const useAddJob = () => {
 
 export const useGetJobById = (id: string) => {
   return useQuery({
-    queryKey: ["getJobById", id],
+    queryKey: ["getJobDetail", id],
     queryFn: () =>
       apiFetch<JobDetailsResponse>(`/api/job/${id}`, { method: "GET" }),
     retry: false,
@@ -61,7 +61,7 @@ export const useUpdateJob = (id: string) => {
       throw new Error("Something went wrong");
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["getJobById", id] });
+      queryClient.invalidateQueries({ queryKey: ["getJobDetail", id] });
       queryClient.invalidateQueries({ queryKey: ["getJobList"] });
     },
     retry: false,
