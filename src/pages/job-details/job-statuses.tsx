@@ -1,4 +1,4 @@
-import { Calendar, Plus } from "lucide-react";
+import { Calendar, Edit, Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
 
 import { ModalDialog } from "@/components/modal";
@@ -14,7 +14,12 @@ export const JobStatusTimeline = ({
 }: {
   statuses: JobStatusesType[];
 }) => {
+  const [data, setData] = useState<JobStatusesType | undefined>(undefined);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [dialogType, setDialogType] = useState<
+    "add" | "update" | "delete" | null
+  >(null);
+
   return (
     <Card className="mx-auto w-full py-2 px-3 mt-5">
       <div className="relative ml-3">
@@ -25,16 +30,41 @@ export const JobStatusTimeline = ({
             {/* Timeline dot */}
             <div className="absolute h-3 w-3 -translate-x-1/2 left-px top-3 rounded-full border-2 border-primary bg-background" />
             {/* Content */}
-            <div className="space-y-0.5">
-              <span className="text-sm font-medium">{item.status}</span>
-              <div className="flex items-center gap-2 mt-2 text-sm">
-                <Calendar className="h-4 w-4" />
-                <span>{detailDateFormatter(item.addDate).local}</span>
+            <div className=" flex justify-between">
+              <div className="space-y-0.5">
+                <span className="text-sm font-medium">{item.status}</span>
+                <div className="flex items-center gap-2 mt-2 text-sm">
+                  <Calendar className="h-4 w-4" />
+                  <span>{detailDateFormatter(item.addDate).local}</span>
+                </div>
+              </div>
+              <div className="flex">
+                {/* Update status */}
+                <Button
+                  variant={"outline"}
+                  onClick={() => {
+                    setDialogOpen(true);
+                    setDialogType("update");
+                    setData(item);
+                  }}>
+                  <Edit />
+                </Button>
+                {/* Delete status */}
+                <Button
+                  className="border-red-400 ml-2 text-red-500 hover:text-red-300"
+                  variant={"outline"}
+                  onClick={() => {
+                    alert("Delete status");
+                    // setUpdateModal(true);
+                  }}>
+                  <Trash2 />
+                </Button>
               </div>
             </div>
           </div>
         ))}
       </div>
+      {/* Add Status */}
       <Button
         className="mt-5 w-full"
         variant={"outline"}
@@ -44,6 +74,8 @@ export const JobStatusTimeline = ({
         <Plus />
         Add Status
       </Button>
+
+      {/* Modal */}
       <ModalDialog
         buttonConfirm={
           <Button
@@ -54,9 +86,27 @@ export const JobStatusTimeline = ({
             Add
           </Button>
         }
-        children={<StatusFormComponent method="add" />}
+        children={
+          dialogType === "add" || dialogType === "update" ? (
+            <StatusFormComponent
+              item={dialogType === "update" ? data : undefined}
+              method={`${dialogType}`}
+            />
+          ) : null
+        }
         closeOnConfirm={false}
-        dialogTitle="Add new Status"
+        dialogTitle={(() => {
+          switch (dialogType) {
+            case "add":
+              return "Add new Status";
+            case "update":
+              return "Update Status";
+            case "delete":
+              return "Delete Status";
+            default:
+              return "Status"; // fallback
+          }
+        })()}
         open={dialogOpen}
         onOpenChange={setDialogOpen}
       />

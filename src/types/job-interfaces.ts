@@ -35,6 +35,7 @@ export type JobPayloadType = {
 };
 
 export type JobStatusesType = {
+  id?: string;
   status: string;
   addDate: Date;
 };

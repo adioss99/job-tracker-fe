@@ -26,3 +26,23 @@ export const useAddJobStatus = (id: string) => {
     retry: false,
   });
 };
+
+export const useUpdateJobStatus = (id: string) => {
+  return useMutation({
+    mutationKey: ["updateJobStatus", id],
+    mutationFn: (payload: JobStatusesRequest) =>
+      apiFetch<JobStatusesResponse>(`/api/job-status/${id}`, {
+        method: "PUT",
+        body: JSON.stringify(payload),
+      }),
+    onError: (err) => {
+      console.error(err);
+      throw new Error("Something went wrong");
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["getJobDetail", id] });
+      queryClient.invalidateQueries({ queryKey: ["getJobList"] });
+    },
+    retry: false,
+  });
+};

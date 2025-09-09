@@ -3,7 +3,7 @@ import { format } from "date-fns";
 import { CalendarIcon, TextCursorInput } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { toast } from "react-toastify";
 
 import { Button } from "@/components/ui/button";
@@ -30,7 +30,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { useAddJobStatus } from "@/hooks/use-job-statuses";
+import { useAddJobStatus, useUpdateJobStatus } from "@/hooks/use-job-statuses";
 import type {
   JobStatusesResponse,
   JobStatusesType,
@@ -61,21 +61,25 @@ const selectList = [
 
 export const StatusFormComponent = ({
   method = "add",
-  success,
+  item,
 }: {
-  success?: boolean;
+  item?: JobStatusesType;
   method: "add" | "update";
 }) => {
-  const date = new Date();
   const { id } = useParams();
+  const navigate = useNavigate();
   const [isOther, setIsOther] = useState(false);
 
-  const { mutateAsync: addStatus, isPending, error } = useAddJobStatus(id!);
+  const { mutateAsync: addStatus } = useAddJobStatus(id!);
+  const { mutateAsync: updateStatus } = useUpdateJobStatus(
+    id! + `?statusId=${item?.id}`
+  );
 
+  const date = item?.addDate ? new Date(item.addDate) : new Date();
   const form = useForm<StatusFormData>({
     resolver: zodResolver(statusSchema),
     defaultValues: {
-      status: "",
+      status: item?.status ?? "",
       statusInput: "",
       addDate: date,
     },
@@ -101,10 +105,15 @@ export const StatusFormComponent = ({
 
     if (method === "add") {
       res = await addStatus(payload);
+    } else if (method === "update") {
+      res = await updateStatus(payload);
+      navigate(`/job/${id}`, { replace: true });
     }
 
     if (res.success) {
-      toast.success("add new status successful!");
+      toast.success(
+        `${method === "add" ? "Add" : "Update"} status successful!`
+      );
     } else {
       toast.error(`Task failed. ${res.message}`);
     }
