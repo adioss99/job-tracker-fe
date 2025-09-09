@@ -27,11 +27,11 @@ export const useAddJobStatus = (id: string) => {
   });
 };
 
-export const useUpdateJobStatus = (id: string) => {
+export const useUpdateJobStatus = (jobId: string, id: string) => {
   return useMutation({
     mutationKey: ["updateJobStatus", id],
     mutationFn: (payload: JobStatusesRequest) =>
-      apiFetch<JobStatusesResponse>(`/api/job-status/${id}`, {
+      apiFetch<JobStatusesResponse>(`/api/job-status/${jobId}?statusId=${id}`, {
         method: "PUT",
         body: JSON.stringify(payload),
       }),
@@ -40,7 +40,26 @@ export const useUpdateJobStatus = (id: string) => {
       throw new Error("Something went wrong");
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["getJobDetail", id] });
+      queryClient.invalidateQueries({ queryKey: ["getJobDetail", jobId] });
+      queryClient.invalidateQueries({ queryKey: ["getJobList"] });
+    },
+    retry: false,
+  });
+};
+
+export const useRemoveJobStatus = (jobId: string, id: string) => {
+  return useMutation({
+    mutationKey: ["removeJobStatus", id],
+    mutationFn: () =>
+      apiFetch<JobStatusesResponse>(`/api/job-status?statusId=${id}`, {
+        method: "DELETE",
+      }),
+    onError: (err) => {
+      console.error(err);
+      throw new Error("Something went wrong");
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["getJobDetail", jobId] });
       queryClient.invalidateQueries({ queryKey: ["getJobList"] });
     },
     retry: false,

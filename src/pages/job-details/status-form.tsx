@@ -3,7 +3,7 @@ import { format } from "date-fns";
 import { CalendarIcon, TextCursorInput } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate, useParams } from "react-router";
+import { useParams } from "react-router";
 import { toast } from "react-toastify";
 
 import { Button } from "@/components/ui/button";
@@ -30,7 +30,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { useAddJobStatus, useUpdateJobStatus } from "@/hooks/use-job-statuses";
+import {
+  useAddJobStatus,
+  useRemoveJobStatus,
+  useUpdateJobStatus,
+} from "@/hooks/use-job-statuses";
 import type {
   JobStatusesResponse,
   JobStatusesType,
@@ -64,16 +68,14 @@ export const StatusFormComponent = ({
   item,
 }: {
   item?: JobStatusesType;
-  method: "add" | "update";
+  method: "add" | "update" | "delete";
 }) => {
   const { id } = useParams();
-  const navigate = useNavigate();
   const [isOther, setIsOther] = useState(false);
 
   const { mutateAsync: addStatus } = useAddJobStatus(id!);
-  const { mutateAsync: updateStatus } = useUpdateJobStatus(
-    id! + `?statusId=${item?.id}`
-  );
+  const { mutateAsync: updateStatus } = useUpdateJobStatus(id!, item?.id ?? "");
+  const { mutateAsync: removeStatus } = useRemoveJobStatus(id!, item?.id ?? "");
 
   const date = item?.addDate ? new Date(item.addDate) : new Date();
   const form = useForm<StatusFormData>({
@@ -97,7 +99,6 @@ export const StatusFormComponent = ({
   };
 
   const submitHandler = async (payload: JobStatusesType) => {
-    console.log(payload);
     let res: JobStatusesResponse = {
       success: false,
       message: "Something went wrong",
@@ -107,7 +108,8 @@ export const StatusFormComponent = ({
       res = await addStatus(payload);
     } else if (method === "update") {
       res = await updateStatus(payload);
-      navigate(`/job/${id}`, { replace: true });
+    } else {
+      res = await removeStatus();
     }
 
     if (res.success) {
@@ -119,6 +121,27 @@ export const StatusFormComponent = ({
     }
   };
 
+  const handleDeleteStatus = async () => {
+    const res = await removeStatus();
+    if (res.success) {
+      toast.success("Delete status successful!");
+    } else {
+      toast.error("Delete status failed!");
+    }
+  };
+  if (method === "delete") {
+    return (
+      <div className="flex justify-between w-full">
+        <p>Are you sure you want to delete this status?</p>
+        <Button
+          className="hidden"
+          id="delete-status"
+          onClick={handleDeleteStatus}>
+          Delete
+        </Button>
+      </div>
+    );
+  }
   return (
     <Form {...form}>
       <form

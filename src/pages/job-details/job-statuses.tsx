@@ -16,9 +16,9 @@ export const JobStatusTimeline = ({
 }) => {
   const [data, setData] = useState<JobStatusesType | undefined>(undefined);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [dialogType, setDialogType] = useState<
-    "add" | "update" | "delete" | null
-  >(null);
+  const [dialogType, setDialogType] = useState<"add" | "update" | "delete">(
+    "add"
+  );
 
   return (
     <Card className="mx-auto w-full py-2 px-3 mt-5">
@@ -38,28 +38,31 @@ export const JobStatusTimeline = ({
                   <span>{detailDateFormatter(item.addDate).local}</span>
                 </div>
               </div>
-              <div className="flex">
-                {/* Update status */}
-                <Button
-                  variant={"outline"}
-                  onClick={() => {
-                    setDialogOpen(true);
-                    setDialogType("update");
-                    setData(item);
-                  }}>
-                  <Edit />
-                </Button>
-                {/* Delete status */}
-                <Button
-                  className="border-red-400 ml-2 text-red-500 hover:text-red-300"
-                  variant={"outline"}
-                  onClick={() => {
-                    alert("Delete status");
-                    // setUpdateModal(true);
-                  }}>
-                  <Trash2 />
-                </Button>
-              </div>
+              {item.id && (
+                <div className="flex">
+                  {/* Update status */}
+                  <Button
+                    variant={"outline"}
+                    onClick={() => {
+                      setDialogOpen(true);
+                      setDialogType("update");
+                      setData(item);
+                    }}>
+                    <Edit />
+                  </Button>
+                  {/* Delete status */}
+                  <Button
+                    className="border-red-400 ml-2 text-red-500 hover:text-red-400 hover:bg-red-200/10"
+                    variant={"outline"}
+                    onClick={() => {
+                      setDialogOpen(true);
+                      setDialogType("delete");
+                      setData(item);
+                    }}>
+                    <Trash2 />
+                  </Button>
+                </div>
+              )}
             </div>
           </div>
         ))}
@@ -70,6 +73,7 @@ export const JobStatusTimeline = ({
         variant={"outline"}
         onClick={() => {
           setDialogOpen(true);
+          setDialogType("add");
         }}>
         <Plus />
         Add Status
@@ -79,22 +83,23 @@ export const JobStatusTimeline = ({
       <ModalDialog
         buttonConfirm={
           <Button
-            variant={"outline"}
+            variant={dialogType === "delete" ? "destructive" : "default"}
             onClick={() => {
-              document.getElementById("submit-status-form")?.click();
+              if (dialogType === "delete") {
+                document.getElementById("delete-status")?.click();
+              } else {
+                document.getElementById("submit-status-form")?.click();
+              }
             }}>
-            Add
+            {dialogType === "delete" ? "Delete" : "Save"}
           </Button>
         }
         children={
-          dialogType === "add" || dialogType === "update" ? (
-            <StatusFormComponent
-              item={dialogType === "update" ? data : undefined}
-              method={`${dialogType}`}
-            />
-          ) : null
+          <StatusFormComponent
+            item={dialogType !== "add" ? data : undefined}
+            method={`${dialogType}`}
+          />
         }
-        closeOnConfirm={false}
         dialogTitle={(() => {
           switch (dialogType) {
             case "add":
