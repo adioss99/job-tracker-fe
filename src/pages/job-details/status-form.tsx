@@ -46,19 +46,19 @@ import {
 
 const selectList = [
   {
-    value: "rejected",
+    value: "Rejected",
     label: "Rejected",
   },
   {
-    value: "hired",
+    value: "Hired",
     label: "Hired",
   },
   {
-    value: "interview",
+    value: "Interview",
     label: "Interview",
   },
   {
-    value: "test",
+    value: "Test",
     label: "Test",
   },
 ];

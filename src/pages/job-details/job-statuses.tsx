@@ -26,7 +26,7 @@ export const JobStatusTimeline = ({
         {/* Timeline line */}
         <div className="absolute left-0 top-4 bottom-0 border-l-2" />
         {statuses.map((item, index) => (
-          <div className="relative pl-5" key={index}>
+          <div className="relative pl-6 pb-2 pt-1 last:pb-0" key={index}>
             {/* Timeline dot */}
             <div className="absolute h-3 w-3 -translate-x-1/2 left-px top-3 rounded-full border-2 border-primary bg-background" />
             {/* Content */}

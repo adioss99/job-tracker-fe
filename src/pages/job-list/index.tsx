@@ -17,25 +17,29 @@ import { useGetJobList } from "@/hooks/use-track-job";
 import { ActionButton } from "@/pages/job-list/table-action";
 import { dateFormat, maxTextLength } from "@/utils/formatter";
 
-const StatusBadge = ({ statuses }: { statuses: string }) => {
-  let color;
+const colorMap: Record<string, string> = {
+  "No Status": "bg-gray-600/10 text-gray-500",
+  Rejected: "bg-red-600/10 text-red-500",
+  Hired: "bg-green-600/10 text-green-500",
+  default: "bg-yellow-600/10 text-yellow-500",
+};
 
-  if (statuses === "No Status") {
-    color = "gray";
-  } else if (statuses === "Rejected") {
-    color = "red";
-  } else if (statuses === "Hired") {
-    color = "emerald";
-  }
+const dotColorMap: Record<string, string> = {
+  "No Status": "bg-gray-500",
+  Rejected: "bg-red-500",
+  Hired: "bg-green-500",
+  default: "bg-yellow-500",
+};
+
+const StatusBadge = ({ statuses }: { statuses: string }) => {
+  const badgeColor = colorMap[statuses] || colorMap.default;
+  const dotColor = dotColorMap[statuses] || dotColorMap.default;
 
   return (
-    <>
-      <Badge
-        className={`bg-${color}-600/10 text-${color}-500 shadow-none rounded-full`}>
-        <div className={`h-1.5 w-1.5 rounded-full bg-${color}-500 mr-2`} />
-        {statuses}
-      </Badge>
-    </>
+    <Badge className={`shadow-none rounded-full ${badgeColor}`}>
+      <div className={`h-1.5 w-1.5 rounded-full mr-2 ${dotColor}`} />
+      {statuses}
+    </Badge>
   );
 };
 
