@@ -1,9 +1,10 @@
-import { Plus } from "lucide-react";
+import { Eye, Plus, SearchIcon } from "lucide-react";
 import { Link } from "react-router";
 
 import { Loading } from "@/components/loading";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -61,7 +62,45 @@ const JobList = () => {
       <div className="border border-gray-200 rounded-md">
         <Table>
           <TableHeader>
+            <TableRow className="border-b-0">
+              <TableHead />
+              <TableHead>
+                <div className="relative">
+                  <Input
+                    className="pl-8 h-7 text-sm font-medium"
+                    id="search-title"
+                    name="search-title"
+                    onKeyDown={(e) => console.log("asdlfasdf")}
+                  />
+                  <SearchIcon className="absolute opacity-50 inset-y-0 my-auto left-2 h-4 w-4" />
+                </div>
+              </TableHead>
+              <TableHead>
+                <div className="relative">
+                  <Input
+                    className="pl-8 h-7 text-sm font-medium"
+                    id="search-company"
+                    name="search-company"
+                    onKeyDown={(e) => console.log("asdlfasdf")}
+                  />
+                  <SearchIcon className="absolute opacity-50 inset-y-0 my-auto left-2 h-4 w-4" />
+                </div>
+              </TableHead>
+              <TableHead>
+                <div className="relative">
+                  <Input
+                    className="pl-8 h-7 text-sm font-medium"
+                    id="search-company"
+                    name="search-company"
+                    onKeyDown={(e) => console.log("asdlfasdf")}
+                  />
+                  <SearchIcon className="absolute opacity-50 inset-y-0 my-auto left-2 h-4 w-4" />
+                </div>
+              </TableHead>
+              {/* Empty cells to match other columns */}
+            </TableRow>
             <TableRow>
+              <TableHead></TableHead>
               <TableHead>Title</TableHead>
               <TableHead>Company</TableHead>
               <TableHead>Location</TableHead>
@@ -75,6 +114,16 @@ const JobList = () => {
           <TableBody>
             {jobs?.data?.map((item) => (
               <TableRow key={item.id}>
+                <TableCell>
+                  <Link to={`/job/${item.id}`}>
+                    <Button
+                      className="h-4 w-4 flex items-center p-1"
+                      variant={"ghost"}>
+                      <Eye className="h-4 w-4 opacity-50" />
+                      <span className="sr-only">Details, {item.title}</span>
+                    </Button>
+                  </Link>
+                </TableCell>
                 <TableCell className="font-medium capitalize">
                   {maxTextLength(item.title, 20)}
                 </TableCell>

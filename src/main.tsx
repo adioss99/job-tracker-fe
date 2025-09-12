@@ -17,7 +17,7 @@ export const queryClient = new QueryClient({
   },
 });
 
-createRoot(document.getElementById("app-root")!).render(
+createRoot(document.getElementById("app")!).render(
   <StrictMode>
     <ErrorBoundary>
       <AuthProvider>
