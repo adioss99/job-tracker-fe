@@ -40,6 +40,12 @@ export type JobStatusesType = {
   addDate: Date;
 };
 
+export type JobSearchType = {
+  title?: string;
+  company?: string;
+  location?: string;
+};
+
 export type JobResponse = ApiResponse<JobPayloadType>;
 export type JobRequest = JobPayloadType;
 export type JobListResponse = ApiResponse<

@@ -1,4 +1,5 @@
-import { Eye, Plus, SearchIcon } from "lucide-react";
+import { Plus, SearchIcon } from "lucide-react";
+import { useState } from "react";
 import { Link } from "react-router";
 
 import { Loading } from "@/components/loading";
@@ -16,6 +17,8 @@ import {
 
 import { useGetJobList } from "@/hooks/use-track-job";
 import { ActionButton } from "@/pages/job-list/table-action";
+import type { JobSearchType } from "@/types/job-interfaces";
+import { useDebounce } from "@/utils/ebounce";
 import { dateFormat, maxTextLength } from "@/utils/formatter";
 
 const colorMap: Record<string, string> = {
@@ -45,9 +48,19 @@ const StatusBadge = ({ statuses }: { statuses: string }) => {
 };
 
 const JobList = () => {
-  const { data: jobs, isLoading, error } = useGetJobList();
+  const [search, setSearch] = useState<JobSearchType>({
+    title: "",
+    company: "",
+    location: "",
+  });
 
-  if (isLoading) return <Loading />;
+  const debouncedSearch = useDebounce(search, 500);
+  const {
+    data: jobs,
+    isLoading,
+    error,
+  } = useGetJobList(debouncedSearch ?? null);
+
   if (error) return <p>Something went wrong</p>;
   return (
     <>
@@ -65,41 +78,55 @@ const JobList = () => {
             <TableRow className="border-b-0">
               <TableHead />
               <TableHead>
-                <div className="relative">
+                <div className="relative max-w-[150px]">
                   <Input
-                    className="pl-8 h-7 text-sm font-medium"
+                    className="pl-6 h-7 text-sm font-light"
                     id="search-title"
                     name="search-title"
-                    onKeyDown={(e) => console.log("asdlfasdf")}
+                    placeholder="Title"
+                    value={search.title}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                      setSearch({ ...search, title: e.target.value })
+                    }
                   />
-                  <SearchIcon className="absolute opacity-50 inset-y-0 my-auto left-2 h-4 w-4" />
+                  <SearchIcon className="absolute opacity-50 inset-y-0 my-auto left-2 h-3 w-3" />
                 </div>
               </TableHead>
               <TableHead>
-                <div className="relative">
+                <div className="relative max-w-[120px]">
                   <Input
-                    className="pl-8 h-7 text-sm font-medium"
+                    className="pl-6 h-7 text-sm font-light"
                     id="search-company"
                     name="search-company"
-                    onKeyDown={(e) => console.log("asdlfasdf")}
+                    placeholder="Company"
+                    value={search.company}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                      setSearch({ ...search, company: e.target.value })
+                    }
                   />
-                  <SearchIcon className="absolute opacity-50 inset-y-0 my-auto left-2 h-4 w-4" />
+                  <SearchIcon className="absolute opacity-50 inset-y-0 my-auto left-2 h-3 w-3" />
                 </div>
               </TableHead>
               <TableHead>
-                <div className="relative">
+                <div className="relative max-w-[100px]">
                   <Input
-                    className="pl-8 h-7 text-sm font-medium"
-                    id="search-company"
-                    name="search-company"
-                    onKeyDown={(e) => console.log("asdlfasdf")}
+                    className="pl-6 h-7 text-sm font-light"
+                    id="search-location"
+                    name="search-location"
+                    placeholder="Location"
+                    value={search.location}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                      setSearch({ ...search, location: e.target.value })
+                    }
                   />
-                  <SearchIcon className="absolute opacity-50 inset-y-0 my-auto left-2 h-4 w-4" />
+                  <SearchIcon className="absolute opacity-50 inset-y-0 my-auto left-2 h-3 w-3" />
                 </div>
               </TableHead>
-              {/* Empty cells to match other columns */}
+              <TableHead />
+              <TableHead />
+              <TableHead />
             </TableRow>
-            <TableRow>
+            <TableRow className="bg-muted/50">
               <TableHead></TableHead>
               <TableHead>Title</TableHead>
               <TableHead>Company</TableHead>
@@ -108,21 +135,20 @@ const JobList = () => {
               <TableHead>Type</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Applied at</TableHead>
-              <TableHead className="text-center">Action</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
+            {isLoading && (
+              <TableRow>
+                <TableCell className="h-24 w-full text-center" colSpan={8}>
+                  <Loading />
+                </TableCell>
+              </TableRow>
+            )}
             {jobs?.data?.map((item) => (
               <TableRow key={item.id}>
                 <TableCell>
-                  <Link to={`/job/${item.id}`}>
-                    <Button
-                      className="h-4 w-4 flex items-center p-1"
-                      variant={"ghost"}>
-                      <Eye className="h-4 w-4 opacity-50" />
-                      <span className="sr-only">Details, {item.title}</span>
-                    </Button>
-                  </Link>
+                  <ActionButton id={item.id} />
                 </TableCell>
                 <TableCell className="font-medium capitalize">
                   {maxTextLength(item.title, 20)}
@@ -136,17 +162,12 @@ const JobList = () => {
                 <TableCell>
                   <StatusBadge statuses={item.latestStatus} />
                 </TableCell>
-                <TableCell className="text-end">
-                  {dateFormat(item.applyDate).local}
-                </TableCell>
-                <TableCell className="flex justify-center">
-                  <ActionButton id={item.id} />
-                </TableCell>
+                <TableCell>{dateFormat(item.applyDate).local}</TableCell>
               </TableRow>
             ))}
             {!jobs?.data && (
               <TableRow>
-                <TableCell className="h-24 text-center" colSpan={7}>
+                <TableCell className="h-24 w-full text-center" colSpan={8}>
                   No record.
                 </TableCell>
               </TableRow>

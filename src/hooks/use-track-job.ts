@@ -7,12 +7,24 @@ import type {
   JobListResponse,
   JobRequest,
   JobResponse,
+  JobSearchType,
 } from "@/types/job-interfaces";
 
-export const useGetJobList = () => {
+export const useGetJobList = (filters: JobSearchType) => {
+  const params = new URLSearchParams();
+
+  if (filters?.title) params.append("title", filters.title);
+  if (filters?.company) params.append("company", filters.company);
+  if (filters?.location) params.append("location", filters.location);
+
+  const param = params.size > 0 ? `?${params.toString()}` : "";
+
   return useQuery({
-    queryKey: ["getJobList"],
-    queryFn: () => apiFetch<JobListResponse>("/api/jobs", { method: "GET" }),
+    queryKey: ["getJobList", param],
+    queryFn: () =>
+      apiFetch<JobListResponse>(`/api/jobs${param}`, {
+        method: "GET",
+      }),
     retry: false,
     staleTime: 5 * 60 * 1000,
   });
