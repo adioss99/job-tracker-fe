@@ -1,6 +1,7 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 import { apiFetch } from "@/api";
+import { queryClient } from "@/main";
 import { usePersistStore } from "@/stores/use-persist";
 import type {
   LoginRequest,
@@ -62,6 +63,7 @@ export const useLogout = () => {
       reset();
     },
     onError: () => {
+      queryClient.invalidateQueries({ queryKey: ["getJobList"] });
       reset();
       throw new Error("Something went wrong");
     },
