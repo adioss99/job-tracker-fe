@@ -50,7 +50,7 @@ export async function apiFetch<T>(
     }
   } else if (res.status === 500) {
     toast.error("Internal Server Error");
-    reset();
+    // reset();
     throw new Error("Internal Server Error");
   }
 

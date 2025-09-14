@@ -2,27 +2,21 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 
 import { apiFetch } from "@/api";
 import { queryClient } from "@/main";
+import { usePersistStore } from "@/stores/use-persist";
 import type {
   JobDetailsResponse,
   JobListResponse,
   JobRequest,
   JobResponse,
-  JobSearchType,
 } from "@/types/job-interfaces";
 
-export const useGetJobList = (filters: JobSearchType) => {
-  const params = new URLSearchParams();
-
-  if (filters?.title) params.append("title", filters.title);
-  if (filters?.company) params.append("company", filters.company);
-  if (filters?.location) params.append("location", filters.location);
-
-  const param = params.size > 0 ? `?${params.toString()}` : "";
-
+export const useGetJobList = (pagination: string, filters: string) => {
+  const userId = usePersistStore((state) => state.auth._user);
+  const queryParams = `?${pagination}${filters ? `&${filters}` : ""}`;
   return useQuery({
-    queryKey: ["getJobList", param],
+    queryKey: ["getJobList", userId, queryParams],
     queryFn: () =>
-      apiFetch<JobListResponse>(`/api/jobs${param}`, {
+      apiFetch<JobListResponse>(`/api/jobs${queryParams}`, {
         method: "GET",
       }),
     retry: false,
