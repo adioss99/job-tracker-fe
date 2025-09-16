@@ -71,7 +71,8 @@ const StatusBadge = ({ statuses }: { statuses: string }) => {
 
 const JobList = () => {
   const [q] = useSearchParams();
-  const [paginationParams, setPaginationParams] = useSearchParams();
+  const [paginationParams, setPaginationParams] =
+    useSearchParams("page=1&limit=10");
   const getPage = Number(q.get("page")) || 1;
   const getLimit = Number(q.get("limit")) || 10;
 
