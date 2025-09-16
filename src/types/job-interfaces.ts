@@ -78,3 +78,9 @@ export type jobDashboardType = ApiResponse<{
   applicationsResponded: number;
   applicationsRejected: number;
 }>;
+
+export type ChartType = { _id: string; count: number };
+export type JobChartType = ApiResponse<{
+  last12Months: ChartType[];
+  last30Days: ChartType[];
+}>;

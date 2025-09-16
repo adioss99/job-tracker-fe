@@ -34,6 +34,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
+    "dayjs": "^1.11.18",
     "jwt-decode": "^4.0.0",
     "lucide-react": "^0.525.0",
     "next-themes": "^0.4.6",
@@ -44,6 +45,7 @@
     "react-hook-form": "^7.62.0",
     "react-router": "^7.6.3",
     "react-toastify": "^11.0.5",
+    "recharts": "2.15.4",
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.3.1",
     "tailwindcss": "^4.1.11",
@@ -88,5 +90,8 @@
       "prettier -w"
     ]
   },
-  "packageManager": "pnpm@9.0.0"
+  "packageManager": "pnpm@9.0.0",
+  "overrides": {
+    "react-is": "^19.0.0-rc-69d4b800-20241021"
+  }
 }

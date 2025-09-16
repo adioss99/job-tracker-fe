@@ -53,7 +53,7 @@ export const useRegister = () => {
 };
 
 export const useLogout = () => {
-  const { reset } = usePersistStore();
+  const reset = usePersistStore((state) => state.reset);
   return useMutation({
     mutationKey: ["logout"],
     mutationFn: () =>
@@ -81,7 +81,7 @@ export const useGetUserProfile = () => {
 };
 
 export const useGetRefreshToken = () => {
-  const { setAuthToken, reset } = usePersistStore();
+  const setAuthToken = usePersistStore((state) => state.setAuthToken);
   return useMutation<RefreshTokenResponse>({
     mutationKey: ["getRefreshToken"],
     mutationFn: () =>
@@ -92,12 +92,9 @@ export const useGetRefreshToken = () => {
           token: res.accessToken,
           _user: getAuthId(res.data.id),
         });
-      } else {
-        reset();
       }
     },
     onError: () => {
-      reset();
       throw new Error("Internal Server Error");
     },
     retry: false,

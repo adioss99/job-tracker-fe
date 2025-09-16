@@ -18,6 +18,7 @@ export const useGetJobList = (pagination: string, filters: string) => {
         method: "GET",
       }),
     retry: false,
+    enabled: !!queryParams,
     staleTime: 5 * 60 * 1000,
   });
 };
