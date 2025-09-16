@@ -71,3 +71,10 @@ export type JobDetailsResponse = ApiResponse<
 
 export type JobStatusesRequest = JobStatusesType;
 export type JobStatusesResponse = ApiResponse<JobStatusesType>;
+
+export type jobDashboardType = ApiResponse<{
+  totalJobApplied: number;
+  totalJobLast30Days: number;
+  applicationsResponded: number;
+  applicationsRejected: number;
+}>;
