@@ -37,12 +37,6 @@ import { useJobForm } from "@/stores/use-job-form";
 import type { JobRequest } from "@/types/job-interfaces";
 import { type AddJobFormData, addJobSchema } from "@/validation/job-validation";
 
-interface JobFormProps {
-  pageTitle: string;
-  isLoading: boolean;
-  payload?: JobRequest;
-}
-
 const roles = ["Full Time", "Part Time", "Freelance", "Contract", "Internship"];
 const types = ["Onsite", "Remote", "Hybrid"];
 const sources = [
@@ -62,17 +56,26 @@ const applyOns = [
   "Other",
 ];
 
+interface JobFormProps {
+  pageTitle: string;
+  isLoading: boolean;
+  payload?: JobRequest;
+}
+
 export const JobForm: React.FC<JobFormProps> = ({
   pageTitle,
   isLoading,
   payload,
 }) => {
-  const { data: aiResponse, isLoading: isAiLoading, error } = useGetAi();
+  const { mutateAsync, isPending: isAiLoading, error } = useGetAi();
+
+  const [sourceLInk, setSourceLInk] = useState("");
   const [open, setOpen] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const setFormData = useJobForm((state) => state.setFormData);
 
   const date = payload?.applyDate ? new Date(payload.applyDate) : new Date();
+
   const form = useForm<AddJobFormData>({
     resolver: zodResolver(addJobSchema),
     defaultValues: {
@@ -93,10 +96,24 @@ export const JobForm: React.FC<JobFormProps> = ({
   };
 
   const onAISubmit = async () => {
-    console.log(aiResponse);
+    const res = await mutateAsync(sourceLInk);
     if (error) {
-      toast.error("AI Assist Error, please try again later");
+      toast.error(error.message);
       return;
+    }
+    const resJon = await res.json();
+    if (!resJon.success) {
+      toast.error("Please make sure the job link is correct");
+      toast.error(resJon.message);
+      return;
+    } else {
+      toast.success("AI Assist success");
+      form.setValue("title", resJon.data.title);
+      form.setValue("company", resJon.data.company);
+      form.setValue("location", resJon.data.location);
+      form.setValue("role", resJon.data.role);
+      form.setValue("type", resJon.data.type);
+      form.setValue("source", resJon.data.source);
     }
   };
 
@@ -137,9 +154,15 @@ export const JobForm: React.FC<JobFormProps> = ({
                           className="ps-8"
                           id="sourceLink"
                           key="sourceLink"
-                          placeholder=""
+                          placeholder="Please input the correct job link here"
                           type="url"
-                          {...field}
+                          {...{
+                            ...field,
+                            onChange: (e) => {
+                              field.onChange(e.target.value);
+                              setSourceLInk(e.target.value);
+                            },
+                          }}
                         />
                         <div
                           className={
@@ -149,11 +172,15 @@ export const JobForm: React.FC<JobFormProps> = ({
                         </div>
                       </div>
                       <Button
-                        className="h-full active:opacity-100 active:outline-offset-0 disabled:cursor-not-allowed disabled:opacity-75 focus-visible:outline-2 focus-visible:outline-offset-2 font-medium bg-linear-to-r from-cyan-600 to-blue-600 focus-visible:outline-cyan-600 hover:opacity-75 inline-flex items-center justify-center gap-2 px-4 py-2 rounded-radius text-white text-sm tracking-wide transition whitespace-nowrap"
-                        disabled={isAiLoading}
+                        className="h-full  active:opacity-100 active:outline-offset-0 disabled:cursor-not-allowed disabled:opacity-45 focus-visible:outline-2 focus-visible:outline-offset-2 font-medium bg-linear-to-r from-cyan-600 to-blue-600 focus-visible:outline-cyan-600 hover:opacity-75 inline-flex items-center justify-center gap-2 px-4 py-2 rounded-radius text-white text-sm tracking-wide transition whitespace-nowrap"
+                        disabled={isAiLoading || !sourceLInk}
                         type="button"
                         variant={"outline"}
-                        onClick={onAISubmit}>
+                        onClick={() => {
+                          if (sourceLInk) {
+                            onAISubmit();
+                          }
+                        }}>
                         {isAiLoading ? (
                           <>
                             <Loader2Icon className="animate-spin" />
