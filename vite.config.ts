@@ -21,9 +21,11 @@ export default defineConfig({
   },
   base: "./",
   server: {
+    host: "0.0.0.0",
+    port: 5173,
     proxy: {
       "/api": {
-        target: "http://127.0.0.1:3000",
+        target: "https://job-tracker-api.up.railway.app",
         changeOrigin: true,
         secure: false,
         rewrite: (path) => path.replace(/^\/api/, "/api"), // keeps the /api prefix
