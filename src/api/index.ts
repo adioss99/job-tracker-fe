@@ -4,6 +4,8 @@ import { usePersistStore } from "@/stores/use-persist"; // your Zustand store
 import type { RefreshTokenResponse } from "@/types/auth-interface";
 import { getAuthId } from "@/utils/code-roles";
 
+const BASE_URL = "https://job-tracker-api.up.railway.app";
+
 export async function apiFetch<T>(
   endpoint: RequestInfo,
   init?: RequestInit
@@ -12,7 +14,7 @@ export async function apiFetch<T>(
   const { setAuthToken, reset } = usePersistStore.getState();
 
   const doFetch = async (accessToken?: string): Promise<Response> => {
-    const res = await fetch(endpoint, {
+    const res = await fetch(BASE_URL + endpoint, {
       ...init,
       headers: {
         ...(init?.headers || {}),
@@ -58,7 +60,7 @@ export async function apiFetch<T>(
 }
 
 const getRefreshToken = async (): Promise<RefreshTokenResponse> => {
-  const response = await fetch(`/api/refresh-token`, {
+  const response = await fetch(`${BASE_URL}/api/refresh-token`, {
     method: "GET",
     credentials: "include",
   });
