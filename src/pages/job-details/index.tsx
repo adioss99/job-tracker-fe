@@ -131,7 +131,7 @@ const JobDetailsPage: React.FC = () => {
                 </Label>
                 <span className="relative">
                   <Input
-                    className="opacity-75"
+                    className="opacity-80 focus-visible:ring-0"
                     id="sourceLink"
                     value={res?.data?.sourceLink}
                     readOnly
