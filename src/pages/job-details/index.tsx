@@ -1,5 +1,6 @@
-import { SquarePen, Trash, Trash2 } from "lucide-react";
-import { useState } from "react";
+import confetti from "canvas-confetti";
+import { Copy, CopyCheck, SquarePen, Trash, Trash2 } from "lucide-react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router";
 import { toast } from "react-toastify";
 
@@ -7,6 +8,7 @@ import { Loading } from "@/components/loading";
 import { ModalDialog } from "@/components/modal";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 import { useGetJobById, useRemoveJob } from "@/hooks/use-track-job";
@@ -17,8 +19,37 @@ const JobDetailsPage: React.FC = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [isCopied, setIsCopied] = useState(false);
   const { data: res, isLoading, error } = useGetJobById(id!);
   const { mutateAsync: removeJob, isPending } = useRemoveJob(id!);
+
+  const handleConfetti = () => {
+    const duration = 5 * 1000;
+    const animationEnd = Date.now() + duration;
+    const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+    const randomInRange = (min: number, max: number) =>
+      Math.random() * (max - min) + min;
+    const interval = window.setInterval(() => {
+      const timeLeft = animationEnd - Date.now();
+      if (timeLeft <= 0) {
+        return clearInterval(interval);
+      }
+      const particleCount = 50 * (timeLeft / duration);
+      confetti({
+        ...defaults,
+        particleCount,
+        origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 },
+        zIndex: 100,
+      });
+      confetti({
+        ...defaults,
+        particleCount,
+        origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
+        zIndex: 100,
+      });
+    }, 250);
+  };
+
   const handleDeleteJob = async () => {
     const res = await removeJob();
     if (res.success) {
@@ -29,6 +60,22 @@ const JobDetailsPage: React.FC = () => {
       toast.error("Delete job failed!");
     }
   };
+
+  const handleCopy = (text: string) => {
+    navigator.clipboard.writeText(text);
+    setIsCopied(true);
+  };
+
+  useEffect(() => {
+    const latestStatus = res?.data?.statuses;
+    if (latestStatus && latestStatus.length > 0) {
+      const last = latestStatus[latestStatus.length - 1];
+      if (last?.status === "Hired") {
+        handleConfetti();
+      }
+    }
+  }, [res]);
+
   if (isLoading || isPending) {
     return <Loading />;
   } else if (error || !res?.data) {
@@ -78,9 +125,29 @@ const JobDetailsPage: React.FC = () => {
               <span>{detailDateFormatter(res?.data?.applyDate).local}</span>
             </div>
             {res?.data?.sourceLink && (
-              <div className="flex flex-col col-span-2 gap-1">
-                <Label className="font-semibold">Link</Label>
-                <span className="truncate">{res?.data?.sourceLink}</span>
+              <div className="flex flex-col col-span-2 gap-1 w-full">
+                <Label className="font-semibold" htmlFor="sourceLink">
+                  Link
+                </Label>
+                <span className="relative">
+                  <Input
+                    className="opacity-75"
+                    id="sourceLink"
+                    value={res?.data?.sourceLink}
+                    readOnly
+                  />
+                  <Button
+                    className="absolute h-7 w-7 right-1 top-1"
+                    size={"icon"}
+                    variant="outline"
+                    onClick={() => handleCopy(res.data.sourceLink as string)}>
+                    {isCopied ? (
+                      <CopyCheck className="opacity-80" />
+                    ) : (
+                      <Copy className="opacity-80" />
+                    )}
+                  </Button>
+                </span>
               </div>
             )}
           </div>
