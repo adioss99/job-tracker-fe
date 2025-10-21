@@ -22,7 +22,7 @@ export const DashboardLayout: React.FC = () => {
           <SidebarInset className="rounded-2xl min-h-full">
             <DashboardHeader />
             <Separator />
-            <div className="flex-1 overflow-y-auto p-4">{<Outlet />}</div>
+            <div className="flex-1 overflow-y-auto p-4 mb-10">{<Outlet />}</div>
           </SidebarInset>
         </div>
       </SidebarProvider>

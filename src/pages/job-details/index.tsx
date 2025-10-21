@@ -139,10 +139,10 @@ const JobDetailsPage: React.FC = () => {
                   <Button
                     className="absolute h-7 w-7 right-1 top-1"
                     size={"icon"}
-                    variant="outline"
+                    variant="ghost"
                     onClick={() => handleCopy(res.data.sourceLink as string)}>
                     {isCopied ? (
-                      <CopyCheck className="opacity-80" />
+                      <CopyCheck className="opacity-50" />
                     ) : (
                       <Copy className="opacity-80" />
                     )}
