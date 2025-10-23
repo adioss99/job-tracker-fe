@@ -137,9 +137,9 @@ const JobDetailsPage: React.FC = () => {
                     readOnly
                   />
                   <Button
-                    className="absolute h-7 w-7 right-1 top-1"
+                    className="absolute h-7 w-7 right-1 top-1 opacity-85"
                     size={"icon"}
-                    variant="ghost"
+                    variant="outline"
                     onClick={() => handleCopy(res.data.sourceLink as string)}>
                     {isCopied ? (
                       <CopyCheck className="opacity-50" />
